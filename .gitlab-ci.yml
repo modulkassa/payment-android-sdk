@@ -1,0 +1,51 @@
+image: jangrewe/gitlab-ci-android:30
+
+stages:
+    - build
+    - verification
+
+before_script:
+    - chmod +x ./gradlew
+    - echo $CI_HTTP_PROXY_URL
+    - echo $CI_HTTP_PROXY_PORT
+
+build master:
+    stage: build
+    only:
+        - master
+        - /^release\/[0-9]+(?:.[0-9]+)+$/
+    tags:
+        - android, docker
+    script:
+        - ./gradlew -Dhttp.proxyHost=$CI_HTTP_PROXY_URL -Dhttp.proxyPort=$CI_HTTP_PROXY_PORT -Dhttps.proxyHost=$CI_HTTP_PROXY_URL -Dhttps.proxyPort=$CI_HTTP_PROXY_PORT clean lintDebug assembleRelease
+    artifacts:
+        paths:
+            - payment-demo/build/outputs/apk/
+            - ./**/build/reports/lint-results.xml
+            - ./**/build/reports/lint-results-*.html
+
+build branch:
+    stage: build
+    except:
+        - master
+        - /^release\/[0-9]+(?:.[0-9]+)+$/
+    tags:
+        - android, docker
+    script:
+        - ./gradlew -Dhttp.proxyHost=$CI_HTTP_PROXY_URL -Dhttp.proxyPort=$CI_HTTP_PROXY_PORT -Dhttps.proxyHost=$CI_HTTP_PROXY_URL -Dhttps.proxyPort=$CI_HTTP_PROXY_PORT clean lintDebug assembleDebug
+    artifacts:
+        paths:
+            - payment-demo/build/outputs/apk/
+            - ./**/build/reports/lint-results.xml
+            - ./**/build/reports/lint-results-*.html
+
+test and analyze:
+    stage: verification
+    tags:
+        - android, docker
+    script:
+        - ./gradlew -Dhttp.proxyHost=$CI_HTTP_PROXY_URL -Dhttp.proxyPort=$CI_HTTP_PROXY_PORT -Dhttps.proxyHost=$CI_HTTP_PROXY_URL -Dhttps.proxyPort=$CI_HTTP_PROXY_PORT testDebug
+    artifacts:
+        when: always
+        reports:
+            junit: ./**/build/test-results/**/TEST-*.xml
