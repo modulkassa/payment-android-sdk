@@ -10,6 +10,8 @@ android {
     defaultConfig {
         minSdk versions.minSdk
         targetSdk versions.targetSdk
+        versionCode 1
+        versionName "0.0.1"
     }
 
     buildTypes {
@@ -25,8 +27,16 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
+    implementation libraries.gson
+    implementation libraries.material
+    implementation libraries.appcompat
+    implementation libraries.constraintlayout
+
     testImplementation libraries.junit
 }

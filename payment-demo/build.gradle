@@ -28,11 +28,18 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
     implementation project(':payment-library')
     implementation libraries.kotlin
     implementation libraries.material
+    implementation libraries.appcompat
+    implementation libraries.constraintlayout
+
     testImplementation libraries.junit
 }
