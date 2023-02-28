@@ -4,10 +4,8 @@
     <application>
         <activity
             android:name=".ui.PaymentActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
+            android:exported="false"
+            android:theme="@style/Theme.Modul.Translucent">
         </activity>
     </application>
 

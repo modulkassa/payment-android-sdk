@@ -1,1 +1,4 @@
-<resources></resources>
+<resources>
+    <string name="payment_description">Описание платежа:</string>
+    <string name="payment_pay">Оплатить</string>
+</resources>

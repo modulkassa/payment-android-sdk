@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun createDemoPaymentOptions(): PaymentOptions {
         return PaymentOptions(
-            description = "Демо платеж",
+            description = "Такой вот длинный, но не очень тестовый платеж",
             listOf(
                 InventPosition(
                     name = "Первая позиция",

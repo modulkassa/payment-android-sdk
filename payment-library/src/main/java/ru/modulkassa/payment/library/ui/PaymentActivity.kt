@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import ru.modulkassa.payment.library.databinding.ActivityPaymentBinding
 import ru.modulkassa.payment.library.entity.PaymentOptions
 import ru.modulkassa.payment.library.entity.PaymentResultError
 
@@ -21,16 +20,15 @@ internal class PaymentActivity : AppCompatActivity() {
         }
     }
 
-    private lateinit var binding: ActivityPaymentBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityPaymentBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
-
         if (savedInstanceState == null) {
-            // do logic
+            val options = intent.getBundleExtra(KEY_PAYMENT_OPTIONS)?.let { PaymentOptions.fromBundle(it) }
+            if (options != null) {
+                val fragment = PaymentBottomSheetFragment.create(options)
+                fragment.show(supportFragmentManager, PaymentBottomSheetFragment.TAG)
+            }
+            // todo добавить обработку ситуации когда options = null
         }
     }
 
