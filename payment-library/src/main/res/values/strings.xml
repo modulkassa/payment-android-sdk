@@ -1,4 +1,8 @@
 <resources>
     <string name="payment_description">Описание платежа:</string>
     <string name="payment_pay">Оплатить</string>
+
+    <string name="error_no_payment_options">Не указаны параметры оплаты</string>
+    <string name="error_cancelled_by_user">Отменено пользователем</string>
+    <string name="error_unknown">Неизвестная ошибка</string>
 </resources>

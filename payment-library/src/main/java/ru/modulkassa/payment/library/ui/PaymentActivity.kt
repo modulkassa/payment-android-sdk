@@ -5,17 +5,17 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import ru.modulkassa.payment.library.R
+import ru.modulkassa.payment.library.entity.ErrorType
 import ru.modulkassa.payment.library.entity.PaymentOptions
 import ru.modulkassa.payment.library.entity.PaymentResultError
 
 internal class PaymentActivity : AppCompatActivity() {
 
     companion object {
-        private const val KEY_PAYMENT_OPTIONS = "key_payment_options"
-
         fun createIntent(context: Context, options: PaymentOptions): Intent {
             return Intent(context, PaymentActivity::class.java).apply {
-                putExtra(KEY_PAYMENT_OPTIONS, options.toBundle())
+                putExtras(options.toBundle())
             }
         }
     }
@@ -23,19 +23,15 @@ internal class PaymentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) {
-            val options = intent.getBundleExtra(KEY_PAYMENT_OPTIONS)?.let { PaymentOptions.fromBundle(it) }
-            if (options != null) {
-                val fragment = PaymentBottomSheetFragment.create(options)
-                fragment.show(supportFragmentManager, PaymentBottomSheetFragment.TAG)
-            }
-            // todo добавить обработку ситуации когда options = null
+            PaymentBottomSheetFragment.create()
+                .show(supportFragmentManager, PaymentBottomSheetFragment.TAG)
         }
     }
 
     // todo переписать на OnBackPressedDispatcher
     override fun onBackPressed() {
         val intent = Intent().apply {
-            putExtras(PaymentResultError("Отменено пользователем").toBundle())
+            putExtras(PaymentResultError(getString(R.string.error_cancelled_by_user), ErrorType.CANCELLED).toBundle())
         }
         setResult(Activity.RESULT_CANCELED, intent)
         super.onBackPressed()

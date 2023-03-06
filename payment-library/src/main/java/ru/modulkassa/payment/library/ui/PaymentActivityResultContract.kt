@@ -15,9 +15,10 @@ class PaymentActivityResultContract : ActivityResultContract<PaymentOptions, Pay
         PaymentActivity.createIntent(context, input)
 
     override fun parseResult(resultCode: Int, intent: Intent?): PaymentResult {
-        if (resultCode != Activity.RESULT_OK) {
-            return PaymentResultError.fromBundle(intent?.extras)
+        return if (resultCode == Activity.RESULT_OK) {
+            PaymentResultSuccess.fromBundle(intent?.extras)
+        } else {
+            PaymentResultError.fromBundle(intent?.extras)
         }
-        return PaymentResultSuccess.fromBundle(intent?.extras)
     }
 }

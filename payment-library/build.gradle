@@ -38,5 +38,10 @@ dependencies {
     implementation libraries.appcompat
     implementation libraries.constraintlayout
 
+    implementation libraries.rxjava3
+    implementation libraries.rxandroid
+    implementation libraries.rxKotlin
+
     testImplementation libraries.junit
+    testImplementation libraries.mockitoKotlin
 }
