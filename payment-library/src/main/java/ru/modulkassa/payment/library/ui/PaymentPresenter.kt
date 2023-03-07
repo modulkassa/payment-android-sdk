@@ -1,6 +1,5 @@
 package ru.modulkassa.payment.library.ui
 
-import android.content.Intent
 import ru.modulkassa.payment.library.entity.PaymentOptions
 
 internal class PaymentPresenter(
@@ -13,6 +12,10 @@ internal class PaymentPresenter(
         val positions = options.inventPositions
         if (positions.isNotEmpty()) {
             getView()?.showPositions(positions)
+            val sum = positions.sumOf { it.price.multiply(it.quantity) }
+            getView()?.showSum(sum)
+        } else {
+            getView()?.setErrorResult(NoInventPositionsError())
         }
     }
 

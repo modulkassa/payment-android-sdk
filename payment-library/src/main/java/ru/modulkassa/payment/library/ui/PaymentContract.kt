@@ -1,8 +1,8 @@
 package ru.modulkassa.payment.library.ui
 
-import android.content.Intent
 import ru.modulkassa.payment.library.entity.InventPosition
 import ru.modulkassa.payment.library.entity.PaymentOptions
+import java.math.BigDecimal
 
 
 internal interface PaymentView : BaseView {
@@ -10,7 +10,7 @@ internal interface PaymentView : BaseView {
     /**
      * Закрыть экран с ошибкой
      */
-    fun setErrorResult(error: Throwable)
+    fun setErrorResult(error: BaseError)
 
     /**
      * Отобразить описание платежа
@@ -21,6 +21,11 @@ internal interface PaymentView : BaseView {
      * Отобразить позиции платежа
      */
     fun showPositions(positions: List<InventPosition>)
+
+    /**
+     * Отобразить сумму платежа
+     */
+    fun showSum(sum: BigDecimal)
 
 }
 

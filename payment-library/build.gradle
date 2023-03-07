@@ -44,4 +44,5 @@ dependencies {
 
     testImplementation libraries.junit
     testImplementation libraries.mockitoKotlin
+    testImplementation libraries.truth
 }

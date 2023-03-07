@@ -51,6 +51,26 @@ class MainActivity : AppCompatActivity() {
                     name = "Первая позиция",
                     price = BigDecimal.TEN,
                     quantity = BigDecimal.ONE
+                ),
+                InventPosition(
+                    name = "Вторая позиция",
+                    price = BigDecimal("20"),
+                    quantity = BigDecimal.ONE
+                ),
+                InventPosition(
+                    name = "Третья позиция",
+                    price = BigDecimal("30"),
+                    quantity = BigDecimal.ONE
+                ),
+                InventPosition(
+                    name = "Четвертая позиция",
+                    price = BigDecimal("40"),
+                    quantity = BigDecimal.ONE
+                ),
+                InventPosition(
+                    name = "Пятая позиция",
+                    price = BigDecimal("50"),
+                    quantity = BigDecimal.TEN
                 )
             )
         )

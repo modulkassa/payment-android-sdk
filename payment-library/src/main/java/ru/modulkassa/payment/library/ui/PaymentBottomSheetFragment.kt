@@ -8,14 +8,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import ru.modulkassa.payment.library.R
 import ru.modulkassa.payment.library.databinding.FragmentPaymentBinding
-import ru.modulkassa.payment.library.entity.ErrorType
 import ru.modulkassa.payment.library.entity.InventPosition
 import ru.modulkassa.payment.library.entity.PaymentOptions
-import ru.modulkassa.payment.library.entity.PaymentResultError
+import java.math.BigDecimal
 
 internal class PaymentBottomSheetFragment : BottomSheetDialogFragment(), PaymentView {
 
@@ -29,11 +29,13 @@ internal class PaymentBottomSheetFragment : BottomSheetDialogFragment(), Payment
 
     private val presenter = PaymentPresenter()
 
+    private var binding: FragmentPaymentBinding? = null
+
+    private lateinit var inventPositionAdapter: InventPositionAdapter
+
     override fun getTheme(): Int = R.style.Theme_Modul_BottomSheetDialog
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog = BottomSheetDialog(requireContext(), theme)
-
-    private var binding: FragmentPaymentBinding? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentPaymentBinding.inflate(inflater, container, false)
@@ -48,7 +50,7 @@ internal class PaymentBottomSheetFragment : BottomSheetDialogFragment(), Payment
         if (options != null) {
             presenter.checkPaymentOptionsAndShow(options)
         } else {
-            setErrorResult(NoPaymentOptionsException())
+            setErrorResult(NoPaymentOptionsError())
         }
     }
 
@@ -59,27 +61,11 @@ internal class PaymentBottomSheetFragment : BottomSheetDialogFragment(), Payment
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        setErrorResult(CanceledByUserException())
+        setErrorResult(CanceledByUserError())
     }
 
-    override fun setErrorResult(error: Throwable) {
-        // todo перенести маппинг в презентер или ExceptionSolver
-        val result = when (error) {
-            is NoPaymentOptionsException -> {
-                PaymentResultError(
-                    getString(R.string.error_no_payment_options),
-                    ErrorType.INVALID_DATA
-                )
-            }
-            is CanceledByUserException -> {
-                PaymentResultError(
-                    getString(R.string.error_cancelled_by_user),
-                    ErrorType.CANCELLED
-                )
-            }
-            else -> PaymentResultError(error.message ?: getString(R.string.error_unknown), ErrorType.UNKNOWN)
-        }
-
+    override fun setErrorResult(error: BaseError) {
+        val result = error.toPaymentResultError(requireContext())
         requireActivity().setResult(Activity.RESULT_CANCELED, Intent().apply { putExtras(result.toBundle()) })
         requireActivity().finish()
     }
@@ -89,6 +75,13 @@ internal class PaymentBottomSheetFragment : BottomSheetDialogFragment(), Payment
     }
 
     override fun showPositions(positions: List<InventPosition>) {
-        // todo SDK-6 Отобразить список позиций для оплаты
+        binding?.positions?.layoutManager = LinearLayoutManager(context)
+        inventPositionAdapter = InventPositionAdapter(positions)
+        binding?.positions?.adapter = inventPositionAdapter
+    }
+
+    override fun showSum(sum: BigDecimal) {
+        val formattedSum = RubSuffixSumFormatter().format(sum)
+        binding?.pay?.text = getString(R.string.payment_pay).plus(" $formattedSum")
     }
 }
