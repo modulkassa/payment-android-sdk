@@ -42,6 +42,12 @@ dependencies {
     implementation libraries.rxandroid
     implementation libraries.rxKotlin
 
+    implementation libraries.retrofit
+    implementation libraries.retrofitGson
+    implementation libraries.retrofitRx
+
+    implementation libraries.loggingInterceptor
+
     testImplementation libraries.junit
     testImplementation libraries.mockitoKotlin
     testImplementation libraries.truth

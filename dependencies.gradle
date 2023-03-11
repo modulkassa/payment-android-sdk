@@ -3,6 +3,7 @@ ext.versions = [minSdk                  : 21,
                 compileSdk              : 33,
                 buildTools              : '33.0.0',
                 kotlin                  : '1.8.0',
+                retrofit                : '2.9.0',
 ]
 
 ext.gradlePlugins = [android            : 'com.android.tools.build:gradle:7.1.3',
@@ -26,4 +27,10 @@ ext.libraries = [kotlin                 : "org.jetbrains.kotlin:kotlin-stdlib:$v
                  rxjava3                : 'io.reactivex.rxjava3:rxjava:3.1.6',
                  rxandroid              : 'io.reactivex.rxjava3:rxandroid:3.0.2',
                  rxKotlin               : 'io.reactivex.rxjava3:rxkotlin:3.0.1',
+
+                 retrofit               : "com.squareup.retrofit2:retrofit:$versions.retrofit",
+                 retrofitGson           : "com.squareup.retrofit2:converter-gson:$versions.retrofit",
+                 retrofitRx             : "com.squareup.retrofit2:adapter-rxjava3:$versions.retrofit",
+
+                 loggingInterceptor     : "com.squareup.okhttp3:logging-interceptor:4.10.0",
 ]
