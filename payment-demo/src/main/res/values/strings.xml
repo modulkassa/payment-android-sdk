@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">payment-android-sdk</string>
+    <string name="pay_by_sbp">Оплатить</string>
 </resources>

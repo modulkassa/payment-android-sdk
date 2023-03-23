@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import ru.modulkassa.payment.library.R
@@ -76,12 +77,16 @@ internal class PaymentBottomSheetFragment : BottomSheetDialogFragment(), Payment
 
     override fun showPositions(positions: List<InventPosition>) {
         binding?.positions?.layoutManager = LinearLayoutManager(context)
+        binding?.positions?.addItemDecoration(
+            RecyclerViewMaterialDivider(requireContext(), LinearLayoutManager.VERTICAL)
+        )
         inventPositionAdapter = InventPositionAdapter(positions)
         binding?.positions?.adapter = inventPositionAdapter
+
+        (dialog as? BottomSheetDialog)?.behavior?.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     override fun showSum(sum: BigDecimal) {
-        val formattedSum = RubSuffixSumFormatter().format(sum)
-        binding?.pay?.text = getString(R.string.payment_pay).plus(" $formattedSum")
+        binding?.summary?.text = RubSuffixSumFormatter().format(sum)
     }
 }

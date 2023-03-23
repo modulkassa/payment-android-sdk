@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Modul.Translucent" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Theme.Modul.Translucent" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -17,5 +17,21 @@
     <style name="Widget.Modul.BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/bg_bottom_sheet_dialog</item>
     </style>
+
+    <style name="Subheader2">
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textColor">#222733</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:lineSpacingExtra">1sp</item>
+    </style>
+
+    <style name="BodyB2">
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textColor">#222733</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:lineSpacingExtra">4sp</item>
+    </style>
+
 
 </resources>
