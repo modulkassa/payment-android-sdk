@@ -2,9 +2,9 @@
     <string name="payment_pay_by">Оплатить через</string>
     <string name="multiply">x</string>
     <string name="summary_title">Итого к оплате:</string>
+    <string name="create_payment_progress">Создание оплаты. Далее Вы будете перенаправлены в приложение Вашего банка для оплаты.</string>
 
     <string name="error_no_payment_options">Не указаны параметры оплаты</string>
     <string name="error_cancelled_by_user">Отменено пользователем</string>
-    <string name="error_no_invent_positions">Список позиций не должен быть пустым</string>
     <string name="error_unknown">Неизвестная ошибка</string>
 </resources>

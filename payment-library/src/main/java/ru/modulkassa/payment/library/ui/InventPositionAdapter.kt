@@ -4,11 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.modulkassa.payment.library.databinding.ItemInventPositionBinding
-import ru.modulkassa.payment.library.entity.InventPosition
+import ru.modulkassa.payment.library.domain.entity.position.Position
 import java.math.RoundingMode
 
 internal class InventPositionAdapter(
-    private val positions: List<InventPosition>
+    private val positions: List<Position>
 ) : RecyclerView.Adapter<InventPositionAdapter.InventPositionViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InventPositionViewHolder {
@@ -27,7 +27,7 @@ internal class InventPositionAdapter(
         val binding: ItemInventPositionBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bindView(position: InventPosition) {
+        fun bindView(position: Position) {
             binding.name.text = position.name
             binding.price.text = RubSuffixSumFormatter().format(position.price)
             binding.quantity.text = position.quantity.setScale(0, RoundingMode.HALF_UP).toPlainString()

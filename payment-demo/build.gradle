@@ -3,9 +3,13 @@ plugins {
     id 'kotlin-android'
 }
 
+apply from: '../clientKeys.gradle'
+
 android {
     namespace "ru.modulkassa.payment.demo"
     compileSdk versions.compileSdk
+
+    def (merchantId, signatureKey) = getClientKeys()
 
     defaultConfig {
         applicationId "ru.modulkassa.payment.demo"
@@ -13,6 +17,9 @@ android {
         targetSdk versions.targetSdk
         versionCode 1
         versionName "1.0"
+
+        buildConfigField "String", "MERCHANT_ID", "\"${merchantId}\""
+        buildConfigField "String", "SIGNATURE_KEY", "\"${signatureKey}\""
     }
 
     buildTypes {

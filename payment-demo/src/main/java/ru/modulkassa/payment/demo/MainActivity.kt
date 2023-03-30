@@ -5,31 +5,36 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import ru.modulkassa.payment.demo.databinding.ActivityMainBinding
 import ru.modulkassa.payment.library.ModulPaymentClient
-import ru.modulkassa.payment.library.entity.InventPosition
-import ru.modulkassa.payment.library.entity.PaymentOptions
-import ru.modulkassa.payment.library.entity.PaymentResult
-import ru.modulkassa.payment.library.entity.PaymentResultError
-import ru.modulkassa.payment.library.entity.PaymentResultSuccess
+import ru.modulkassa.payment.library.domain.entity.PaymentOptions
+import ru.modulkassa.payment.library.domain.entity.position.PaymentMethod
+import ru.modulkassa.payment.library.domain.entity.position.PaymentObject
+import ru.modulkassa.payment.library.domain.entity.position.Position
+import ru.modulkassa.payment.library.domain.entity.position.TaxationMode
+import ru.modulkassa.payment.library.domain.entity.position.VatTag
+import ru.modulkassa.payment.library.domain.entity.result.PaymentResult
+import ru.modulkassa.payment.library.domain.entity.result.PaymentResultError
+import ru.modulkassa.payment.library.domain.entity.result.PaymentResultSuccess
 import java.math.BigDecimal
 
 class MainActivity : AppCompatActivity() {
 
-    private val modulPaymentClient = ModulPaymentClient()
-
-    private lateinit var binding: ActivityMainBinding
-
-    private val startPaymentForResult = registerForActivityResult(
-        modulPaymentClient.createSbpPaymentContract()
-    ) { result: PaymentResult ->
-        when (result) {
-            is PaymentResultSuccess -> {
-                Toast.makeText(this, "Платеж завершен", Toast.LENGTH_SHORT).show()
-            }
-            is PaymentResultError -> {
-                Toast.makeText(this, result.message, Toast.LENGTH_SHORT).show()
+    private val modulPaymentClient = ModulPaymentClient(
+        merchantId = BuildConfig.MERCHANT_ID,
+        signatureKey = BuildConfig.SIGNATURE_KEY
+    ).apply {
+        registerActivityCallback(this@MainActivity) { result: PaymentResult ->
+            when (result) {
+                is PaymentResultSuccess -> {
+                    Toast.makeText(this@MainActivity, "Платеж завершен", Toast.LENGTH_SHORT).show()
+                }
+                is PaymentResultError -> {
+                    Toast.makeText(this@MainActivity, result.message, Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
+
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,38 +44,34 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
 
         binding.payBySbp.setOnClickListener {
-            startPaymentForResult.launch(createDemoPaymentOptions())
+            modulPaymentClient.payBySbp(
+                options = createSingleSbpDemoOptions()
+            )
         }
     }
 
-    private fun createDemoPaymentOptions(): PaymentOptions {
-        return PaymentOptions(
+    private fun createSingleSbpDemoOptions(): PaymentOptions {
+        return PaymentOptions.createSbpOptions(
+            orderId = "order-id-12345",
             description = "Такое вот длинное описание тестового платежа",
-            listOf(
-                InventPosition(
+            positions = listOf(
+                Position(
                     name = "Первая позиция",
                     price = BigDecimal.TEN,
-                    quantity = BigDecimal.ONE
+                    quantity = BigDecimal.ONE,
+                    taxationMode = TaxationMode.OSN,
+                    paymentObject = PaymentObject.COMMODITY,
+                    paymentMethod = PaymentMethod.FULL_PAYMENT,
+                    vat = VatTag.VAT_20
                 ),
-                InventPosition(
+                Position(
                     name = "Вторая позиция",
                     price = BigDecimal("20"),
-                    quantity = BigDecimal.ONE
-                ),
-                InventPosition(
-                    name = "Третья позиция",
-                    price = BigDecimal("30"),
-                    quantity = BigDecimal.ONE
-                ),
-                InventPosition(
-                    name = "Четвертая позиция",
-                    price = BigDecimal("40"),
-                    quantity = BigDecimal.ONE
-                ),
-                InventPosition(
-                    name = "Пятая позиция",
-                    price = BigDecimal("50"),
-                    quantity = BigDecimal.TEN
+                    quantity = BigDecimal.TEN,
+                    taxationMode = TaxationMode.OSN,
+                    paymentObject = PaymentObject.COMMODITY,
+                    paymentMethod = PaymentMethod.FULL_PAYMENT,
+                    vat = VatTag.VAT_20
                 )
             )
         )

@@ -1,0 +1,10 @@
+ext.getClientKeys = {
+    Properties properties = new Properties()
+    File propertiesFile = project.rootProject.file('local.properties')
+    if (propertiesFile.exists()) {
+        properties.load(propertiesFile.newDataInputStream())
+    }
+    def merchantId = properties.getProperty("client.merchantId") ?: "no-value-passed-for-merchantId"
+    def signatureKey = properties.getProperty("client.signatureKey") ?: "no-value-passed-for-signatureKey"
+    return [merchantId, signatureKey]
+}

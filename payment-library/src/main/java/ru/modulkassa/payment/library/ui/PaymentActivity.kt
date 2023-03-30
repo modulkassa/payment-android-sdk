@@ -6,9 +6,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import ru.modulkassa.payment.library.R
-import ru.modulkassa.payment.library.entity.ErrorType
-import ru.modulkassa.payment.library.entity.PaymentOptions
-import ru.modulkassa.payment.library.entity.PaymentResultError
+import ru.modulkassa.payment.library.domain.entity.PaymentOptions
+import ru.modulkassa.payment.library.domain.entity.result.ErrorType
+import ru.modulkassa.payment.library.domain.entity.result.PaymentResultError
 
 internal class PaymentActivity : AppCompatActivity() {
 

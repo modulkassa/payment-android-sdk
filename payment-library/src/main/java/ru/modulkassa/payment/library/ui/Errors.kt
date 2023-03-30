@@ -3,10 +3,10 @@ package ru.modulkassa.payment.library.ui
 import android.content.Context
 import androidx.annotation.StringRes
 import ru.modulkassa.payment.library.R
-import ru.modulkassa.payment.library.entity.ErrorType
-import ru.modulkassa.payment.library.entity.PaymentResultError
+import ru.modulkassa.payment.library.domain.entity.result.ErrorType
+import ru.modulkassa.payment.library.domain.entity.result.PaymentResultError
 
-internal sealed class BaseError(
+internal sealed class BaseErrorResult(
     @StringRes
     private val stringResource: Int = R.string.error_unknown,
     private val type: ErrorType = ErrorType.UNKNOWN
@@ -22,14 +22,9 @@ internal sealed class BaseError(
 /**
  * Не указаны параметры оплаты
  */
-internal class NoPaymentOptionsError : BaseError(R.string.error_no_payment_options, ErrorType.INVALID_DATA)
-
-/**
- * Список позиций не должен быть пустым
- */
-internal class NoInventPositionsError : BaseError(R.string.error_no_invent_positions, ErrorType.INVALID_DATA)
+internal class NoPaymentOptionsError : BaseErrorResult(R.string.error_no_payment_options, ErrorType.INVALID_DATA)
 
 /**
  * Отменено пользователем
  */
-internal class CanceledByUserError : BaseError(R.string.error_cancelled_by_user, ErrorType.CANCELLED)
+internal class CanceledByUserError : BaseErrorResult(R.string.error_cancelled_by_user, ErrorType.CANCELLED)

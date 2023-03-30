@@ -1,18 +1,16 @@
 package ru.modulkassa.payment.library.network
 
-import android.util.Log
-import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.modulkassa.payment.library.entity.GsonFactory
+import ru.modulkassa.payment.library.BuildConfig
 import java.util.concurrent.TimeUnit.SECONDS
 
-internal class NetworkModule {
+internal object NetworkModule {
 
-    private val logger = HttpLoggingInterceptor.Logger { message -> Log.d("HttpLoggingInterceptor", message) }
+    private val logger = HttpLoggingInterceptor.Logger { message -> println(message) }
     private val logInterceptor = HttpLoggingInterceptor(logger)
         .apply {
             this.level = HttpLoggingInterceptor.Level.BODY
@@ -20,15 +18,12 @@ internal class NetworkModule {
 
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(logInterceptor)
-//        .addInterceptor(AuthorizationInterceptor(settingsRepository))
         .connectTimeout(30, SECONDS)
         .readTimeout(30, SECONDS)
         .build()
 
-    private val gson: Gson = GsonFactory.provide()
-
     private val retrofit = Retrofit.Builder()
-//      .baseUrl(BuildConfig.MODULKASSA_BASE_URL)
+        .baseUrl(BuildConfig.PAY_MODUL_URL)
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJava3CallAdapterFactory.create())

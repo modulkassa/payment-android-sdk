@@ -1,4 +1,4 @@
-package ru.modulkassa.payment.library.entity
+package ru.modulkassa.payment.library.domain
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder

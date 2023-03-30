@@ -1,6 +1,7 @@
-package ru.modulkassa.payment.library.entity
+package ru.modulkassa.payment.library.domain.entity.result
 
 import android.os.Bundle
+import ru.modulkassa.payment.library.domain.entity.result.ErrorType.UNKNOWN
 
 /**
  * Типы ошибок
@@ -47,12 +48,12 @@ data class PaymentResultError(
 
         fun fromBundle(data: Bundle?): PaymentResultError {
             return if (data == null) {
-                PaymentResultError(DEFAULT_MESSAGE, ErrorType.UNKNOWN)
+                PaymentResultError(DEFAULT_MESSAGE, UNKNOWN)
             } else {
                 val type = try {
                     ErrorType.valueOf(data.getString(KEY_ERROR_TYPE, ""))
                 } catch (error: IllegalArgumentException) {
-                    ErrorType.UNKNOWN
+                    UNKNOWN
                 }
                 PaymentResultError(
                     message = data.getString(KEY_ERROR_MESSAGE, DEFAULT_MESSAGE),

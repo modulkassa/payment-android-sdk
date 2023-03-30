@@ -1,4 +1,4 @@
-package ru.modulkassa.payment.library.entity
+package ru.modulkassa.payment.library.domain.entity
 
 import android.os.Bundle
 

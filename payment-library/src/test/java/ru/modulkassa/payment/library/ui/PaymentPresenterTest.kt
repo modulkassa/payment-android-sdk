@@ -6,8 +6,12 @@ import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Test
-import ru.modulkassa.payment.library.entity.InventPosition
-import ru.modulkassa.payment.library.entity.PaymentOptions
+import ru.modulkassa.payment.library.domain.entity.PaymentOptions
+import ru.modulkassa.payment.library.domain.entity.position.Position
+import ru.modulkassa.payment.library.domain.entity.position.PaymentMethod.FULL_PAYMENT
+import ru.modulkassa.payment.library.domain.entity.position.PaymentObject.PAYMENT
+import ru.modulkassa.payment.library.domain.entity.position.TaxationMode.OSN
+import ru.modulkassa.payment.library.domain.entity.position.VatTag.VAT_20
 import java.math.BigDecimal
 
 class PaymentPresenterTest {
@@ -18,8 +22,13 @@ class PaymentPresenterTest {
         val view = mock<PaymentView>()
         presenter.attachView(view)
 
-        val positions = listOf(InventPosition("name", BigDecimal.TEN, BigDecimal.ONE))
-        val options = PaymentOptions(description = "description", inventPositions = positions)
+        val positions =
+            listOf(Position("name", BigDecimal.TEN, BigDecimal.ONE, OSN, PAYMENT, FULL_PAYMENT, VAT_20))
+        val options = PaymentOptions.createSbpOptions(
+            orderId = "order-id",
+            description = "description",
+            positions = positions
+        )
         presenter.checkPaymentOptionsAndShow(options)
 
         verify(view, times(1)).showDescription("description")
@@ -32,14 +41,18 @@ class PaymentPresenterTest {
         val view = mock<PaymentView>()
         presenter.attachView(view)
 
-        val options = PaymentOptions(description = "description", inventPositions = emptyList())
+        val options = PaymentOptions.createSbpOptions(
+            orderId = "order-id",
+            description = "description",
+            positions = emptyList()
+        )
         presenter.checkPaymentOptionsAndShow(options)
 
         verify(view, never()).showPositions(any())
     }
 
     private fun createPresenter(): PaymentPresenter {
-        return PaymentPresenter()
+        return PaymentPresenter(mock())
     }
 
 }

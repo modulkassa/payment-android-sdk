@@ -4,10 +4,10 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.activity.result.contract.ActivityResultContract
-import ru.modulkassa.payment.library.entity.PaymentOptions
-import ru.modulkassa.payment.library.entity.PaymentResult
-import ru.modulkassa.payment.library.entity.PaymentResultError
-import ru.modulkassa.payment.library.entity.PaymentResultSuccess
+import ru.modulkassa.payment.library.domain.entity.PaymentOptions
+import ru.modulkassa.payment.library.domain.entity.result.PaymentResult
+import ru.modulkassa.payment.library.domain.entity.result.PaymentResultError
+import ru.modulkassa.payment.library.domain.entity.result.PaymentResultSuccess
 
 class PaymentActivityResultContract : ActivityResultContract<PaymentOptions, PaymentResult>() {
 
