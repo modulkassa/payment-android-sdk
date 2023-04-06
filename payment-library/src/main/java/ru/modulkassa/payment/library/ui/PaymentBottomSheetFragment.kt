@@ -15,6 +15,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import ru.modulkassa.payment.library.R
 import ru.modulkassa.payment.library.databinding.FragmentPaymentBinding
+import ru.modulkassa.payment.library.network.GsonFactory
 import ru.modulkassa.payment.library.domain.PaymentTerminalImpl
 import ru.modulkassa.payment.library.domain.entity.PaymentOptions
 import ru.modulkassa.payment.library.domain.entity.position.Position
@@ -33,7 +34,8 @@ internal class PaymentBottomSheetFragment : BottomSheetDialogFragment(), Payment
 
     private val presenter = PaymentPresenter(
         PaymentTerminalImpl(
-            api = NetworkModule.payApi
+            api = NetworkModule.payApi,
+            gson = GsonFactory.provide()
         )
     )
 

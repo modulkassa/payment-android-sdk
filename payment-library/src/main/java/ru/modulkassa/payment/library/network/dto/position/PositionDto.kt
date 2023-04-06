@@ -1,7 +1,6 @@
 package ru.modulkassa.payment.library.network.dto.position
 
 import com.google.gson.annotations.SerializedName
-import java.math.BigDecimal
 
 /**
  * Позиция оплаты для фискализации чека
@@ -14,15 +13,15 @@ internal data class PositionDto(
     /**
      * Количество
      */
-    val quantity: BigDecimal,
+    val quantity: String,
     /**
      * Цена за единицу товара
      */
-    val price: BigDecimal,
+    val price: String,
     /**
      * Система налоообложения
      */
-    @SerializedName("osn")
+    @SerializedName("sno")
     val taxationMode: TaxationModeDto,
     /**
      * Предмет расчета

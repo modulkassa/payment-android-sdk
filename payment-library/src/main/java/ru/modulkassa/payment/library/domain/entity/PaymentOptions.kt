@@ -1,7 +1,7 @@
 package ru.modulkassa.payment.library.domain.entity
 
 import android.os.Bundle
-import ru.modulkassa.payment.library.domain.GsonFactory
+import ru.modulkassa.payment.library.network.GsonFactory
 import ru.modulkassa.payment.library.domain.entity.position.Position
 import java.math.BigDecimal
 import java.math.RoundingMode

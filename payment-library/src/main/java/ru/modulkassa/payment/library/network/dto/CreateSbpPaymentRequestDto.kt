@@ -1,8 +1,6 @@
 package ru.modulkassa.payment.library.network.dto
 
 import com.google.gson.annotations.SerializedName
-import ru.modulkassa.payment.library.network.dto.position.PositionDto
-import java.math.BigDecimal
 import java.util.UUID
 
 internal data class CreateSbpPaymentRequestDto(
@@ -13,7 +11,7 @@ internal data class CreateSbpPaymentRequestDto(
     /**
      * Сумма платежа
      */
-    val amount: BigDecimal,
+    val amount: String,
     /**
      * Уникальный идентификатор заказа в интернет-магазине
      */
@@ -32,11 +30,12 @@ internal data class CreateSbpPaymentRequestDto(
      * Позиции чека
      */
     @SerializedName("receipt_items")
-    val receiptItems: List<PositionDto>? = null,
+    val receiptItems: String? = null,
+
     /**
      * Криптографическая подпись
      */
-    val signature: String
+    var signature: String? = null
 ) {
     /**
      * Текущее дата и время

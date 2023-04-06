@@ -52,12 +52,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun createSingleSbpDemoOptions(): PaymentOptions {
         return PaymentOptions.createSbpOptions(
-            orderId = "order-id-12345",
-            description = "Такое вот длинное описание тестового платежа",
+            orderId = "14425840",
+            description = "Заказ №14425840",
             positions = listOf(
                 Position(
                     name = "Первая позиция",
-                    price = BigDecimal.TEN,
+                    price = BigDecimal.valueOf(1200.10),
                     quantity = BigDecimal.ONE,
                     taxationMode = TaxationMode.OSN,
                     paymentObject = PaymentObject.COMMODITY,

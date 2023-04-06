@@ -1,8 +1,10 @@
 package ru.modulkassa.payment.library.network.mapper
 
-import ru.modulkassa.payment.library.domain.SignatureGenerator
+import com.google.gson.Gson
 import ru.modulkassa.payment.library.domain.entity.PaymentOptions
 import ru.modulkassa.payment.library.domain.entity.position.Position
+import ru.modulkassa.payment.library.network.BigDecimalFormatter
+import ru.modulkassa.payment.library.network.SignatureGenerator
 import ru.modulkassa.payment.library.network.dto.CreateSbpPaymentRequestDto
 import ru.modulkassa.payment.library.network.dto.position.PaymentMethodDto
 import ru.modulkassa.payment.library.network.dto.position.PaymentObjectDto
@@ -11,27 +13,36 @@ import ru.modulkassa.payment.library.network.dto.position.TaxationModeDto
 import ru.modulkassa.payment.library.network.dto.position.VatTagDto
 
 internal class CreateSbpPaymentRequestMapper(
-    private val options: PaymentOptions
+    private val gson: Gson
 ) {
-    fun toDto(): CreateSbpPaymentRequestDto {
-        return CreateSbpPaymentRequestDto(
+    fun toDto(options: PaymentOptions): CreateSbpPaymentRequestDto {
+        val requestDto = CreateSbpPaymentRequestDto(
             merchant = options.merchantId,
-            amount = options.amount ?: options.calculateAmount(),
+            amount = BigDecimalFormatter.format(options.amount ?: options.calculateAmount()),
             orderId = options.orderId,
-            description = options.description,
+            description = fixLineBreaks(options.description),
             receiptContact = options.receiptContact,
-            receiptItems = options.positions?.map {
-                positionToDto(it)
-            },
-            signature = SignatureGenerator.generate(options.signatureKey)
+            receiptItems = gson.toJson(
+                options.positions?.map {
+                    positionToDto(it)
+                }
+            )
         )
+        val generatedSignature = SignatureGenerator(gson).generate(requestDto, options.signatureKey)
+        requestDto.signature = generatedSignature
+        return requestDto
+    }
+
+    private fun fixLineBreaks(source: String): String {
+        return source.replace("\r", "")
+            .replace("\n", "\r\n")
     }
 
     private fun positionToDto(position: Position): PositionDto {
         return PositionDto(
             name = position.name,
-            quantity = position.quantity,
-            price = position.price,
+            quantity = BigDecimalFormatter.format(position.quantity, scale = 3),
+            price = BigDecimalFormatter.format(position.price),
             taxationMode = try {
                 TaxationModeDto.valueOf(position.taxationMode.name)
             } catch (e: IllegalArgumentException) {
