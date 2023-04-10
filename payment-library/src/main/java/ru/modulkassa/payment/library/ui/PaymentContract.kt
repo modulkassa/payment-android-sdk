@@ -41,6 +41,11 @@ internal interface PaymentView : BaseView {
      */
     fun sendSbpLink(sbpLink: String)
 
+    /**
+     * Отобразить экран с ошибкой
+     */
+    fun showErrorScreen()
+
 }
 
 internal interface PaymentUserActions : BaseUserActions<PaymentView> {

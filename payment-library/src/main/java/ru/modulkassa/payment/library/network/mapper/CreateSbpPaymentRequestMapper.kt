@@ -1,6 +1,7 @@
 package ru.modulkassa.payment.library.network.mapper
 
 import com.google.gson.Gson
+import ru.modulkassa.payment.library.R
 import ru.modulkassa.payment.library.domain.entity.PaymentOptions
 import ru.modulkassa.payment.library.domain.entity.position.Position
 import ru.modulkassa.payment.library.network.BigDecimalFormatter
@@ -11,6 +12,7 @@ import ru.modulkassa.payment.library.network.dto.position.PaymentObjectDto
 import ru.modulkassa.payment.library.network.dto.position.PositionDto
 import ru.modulkassa.payment.library.network.dto.position.TaxationModeDto
 import ru.modulkassa.payment.library.network.dto.position.VatTagDto
+import ru.modulkassa.payment.library.ui.ValidationException
 
 internal class CreateSbpPaymentRequestMapper(
     private val gson: Gson
@@ -46,26 +48,22 @@ internal class CreateSbpPaymentRequestMapper(
             taxationMode = try {
                 TaxationModeDto.valueOf(position.taxationMode.name)
             } catch (e: IllegalArgumentException) {
-                // todo SDK-9 Продумать обработку ошибок из апи и rx цепочек
-                throw Throwable("Кривое СНО")
+                throw ValidationException(causeResource = R.string.error_validation_incorrect_taxation_mode)
             },
             paymentObject = try {
                 PaymentObjectDto.valueOf(position.paymentObject.name)
             } catch (e: IllegalArgumentException) {
-                // todo SDK-9 Продумать обработку ошибок из апи и rx цепочек
-                throw Throwable()
+                throw ValidationException(causeResource = R.string.error_validation_incorrect_payment_object)
             },
             paymentMethod = try {
                 PaymentMethodDto.valueOf(position.paymentMethod.name)
             } catch (e: IllegalArgumentException) {
-                // todo SDK-9 Продумать обработку ошибок из апи и rx цепочек
-                throw Throwable()
+                throw ValidationException(causeResource = R.string.error_validation_incorrect_payment_method)
             },
             vat = try {
                 VatTagDto.valueOf(position.vat.name)
             } catch (e: IllegalArgumentException) {
-                // todo SDK-9 Продумать обработку ошибок из апи и rx цепочек
-                throw Throwable()
+                throw ValidationException(causeResource = R.string.error_validation_incorrect_vat_tag)
             }
         )
     }

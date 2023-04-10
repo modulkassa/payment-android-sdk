@@ -2,10 +2,13 @@ package ru.modulkassa.payment.library.domain
 
 import com.google.gson.Gson
 import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.core.SingleSource
+import retrofit2.HttpException
 import ru.modulkassa.payment.library.domain.entity.PaymentOptions
 import ru.modulkassa.payment.library.network.PaymentApi
-import ru.modulkassa.payment.library.network.dto.BaseResponseStatus
+import ru.modulkassa.payment.library.network.dto.ErrorResponseDto
 import ru.modulkassa.payment.library.network.mapper.CreateSbpPaymentRequestMapper
+import ru.modulkassa.payment.library.ui.ValidationException
 
 internal class PaymentTerminalImpl(
     private val api: PaymentApi,
@@ -18,16 +21,22 @@ internal class PaymentTerminalImpl(
             CreateSbpPaymentRequestMapper(gson).toDto(options)
         }.flatMap {
             api.createSbpPayment(it)
-                .map { response ->
-                    if (response.status == BaseResponseStatus.OK) {
-                        response.sbpLink ?: throw Throwable("Пустая sbpLink") // todo переделать SDK-9
-                    } else {
-                        // todo SDK-9 Продумать обработку ошибок из апи и rx цепочек
-                        // залогировать все текста ошибок
-                        throw Throwable(response.message)
-                    }
-                }
+                .map { it.sbpLink }
+                .onErrorResumeNext { handleError(it) }
         }
     }
-}
 
+    private fun handleError(throwable: Throwable): SingleSource<out String> {
+        return (throwable as? HttpException)?.response()?.errorBody()?.charStream()?.let { reader ->
+            val errorResponse = gson.fromJson(reader, ErrorResponseDto::class.java)
+            println("Произошла ошибка валидации полей при создании платежа: \"${errorResponse.message}\"")
+            errorResponse.fieldErrors?.forEach { (field, errorDescription) ->
+                println("Для поля $field ошибка: $errorDescription")
+            }
+            errorResponse.formErrors?.let { formErrors ->
+                println(formErrors)
+            }
+            Single.error(ValidationException(causeMessage = errorResponse.message))
+        } ?: Single.error(throwable)
+    }
+}

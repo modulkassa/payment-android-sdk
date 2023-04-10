@@ -31,7 +31,7 @@ internal class PaymentActivity : AppCompatActivity() {
     // todo переписать на OnBackPressedDispatcher
     override fun onBackPressed() {
         val intent = Intent().apply {
-            putExtras(PaymentResultError(getString(R.string.error_cancelled_by_user), ErrorType.CANCELLED).toBundle())
+            putExtras(PaymentResultError(getString(R.string.error_result_cancelled_by_user), ErrorType.CANCELLED).toBundle())
         }
         setResult(Activity.RESULT_CANCELED, intent)
         super.onBackPressed()

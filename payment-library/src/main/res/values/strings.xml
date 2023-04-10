@@ -3,8 +3,16 @@
     <string name="multiply">x</string>
     <string name="summary_title">Итого к оплате:</string>
     <string name="create_payment_progress">Создание оплаты. Далее Вы будете перенаправлены в приложение Вашего банка для оплаты.</string>
+    <string name="create_payment_attention">Ошибка создания платежа,\nпопробуйте заново</string>
+    <string name="create_payment_retry">Повторить</string>
 
-    <string name="error_no_payment_options">Не указаны параметры оплаты</string>
-    <string name="error_cancelled_by_user">Отменено пользователем</string>
+    <string name="error_validation_incorrect_taxation_mode">Указана неизвестная система налогооблажения</string>
+    <string name="error_validation_incorrect_payment_object">Указана неизвестный предмет расчета</string>
+    <string name="error_validation_incorrect_payment_method">Указана неизвестный метод платежа</string>
+    <string name="error_validation_incorrect_vat_tag">Указана неизвестная ставка НДС</string>
+
+    <string name="error_result_no_payment_options">Не указаны параметры оплаты</string>
+    <string name="error_result_cancelled_by_user">Отменено пользователем</string>
+    <string name="error_result_validation">Ошибка валидации параметров оплаты</string>
     <string name="error_unknown">Неизвестная ошибка</string>
 </resources>

@@ -15,10 +15,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import ru.modulkassa.payment.library.R
 import ru.modulkassa.payment.library.databinding.FragmentPaymentBinding
-import ru.modulkassa.payment.library.network.GsonFactory
 import ru.modulkassa.payment.library.domain.PaymentTerminalImpl
 import ru.modulkassa.payment.library.domain.entity.PaymentOptions
 import ru.modulkassa.payment.library.domain.entity.position.Position
+import ru.modulkassa.payment.library.network.GsonFactory
 import ru.modulkassa.payment.library.network.NetworkModule
 import java.math.BigDecimal
 
@@ -63,8 +63,11 @@ internal class PaymentBottomSheetFragment : BottomSheetDialogFragment(), Payment
             binding?.payBySbp?.setOnClickListener {
                 presenter.payBySbp(options)
             }
+            binding?.retry?.setOnClickListener {
+                presenter.payBySbp(options)
+            }
         } else {
-            setErrorResult(NoPaymentOptionsError())
+            setErrorResult(NoPaymentOptionsErrorResult())
         }
     }
 
@@ -76,7 +79,7 @@ internal class PaymentBottomSheetFragment : BottomSheetDialogFragment(), Payment
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
-        setErrorResult(CanceledByUserError())
+        setErrorResult(CanceledByUserErrorResult())
     }
 
     override fun setErrorResult(error: BaseErrorResult) {
@@ -107,6 +110,7 @@ internal class PaymentBottomSheetFragment : BottomSheetDialogFragment(), Payment
 
     override fun showProgress() {
         binding?.descriptionLayout?.visibility = View.INVISIBLE
+        binding?.errorLayout?.visibility = View.GONE
         binding?.progressLayout?.visibility = View.VISIBLE
         binding?.progressTitle?.text = getString(R.string.create_payment_progress)
     }
@@ -118,5 +122,10 @@ internal class PaymentBottomSheetFragment : BottomSheetDialogFragment(), Payment
     override fun sendSbpLink(sbpLink: String) {
         // todo SDK-15 Пробрасывать интент с СБП ссылкой
         Toast.makeText(context, sbpLink, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun showErrorScreen() {
+        binding?.progressLayout?.visibility = View.GONE
+        binding?.errorLayout?.visibility = View.VISIBLE
     }
 }

@@ -30,32 +30,26 @@ internal class PaymentPresenter(
 
     override fun payBySbp(options: PaymentOptions) {
         getView()?.showProgress()
-        unsubscribeOnDestroy(paymentTerminal
-            .createSbpPaymentLink(options)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ sbpLink ->
-                getView()?.hideProgress()
-                getView()?.sendSbpLink(sbpLink)
-            }, { error ->
-                // todo SDK-9 Продумать обработку ошибок из апи и rx цепочек
-                getView()?.sendSbpLink(error.message ?: "ошибка")
-            })
+        unsubscribeOnDestroy(
+            paymentTerminal
+                .createSbpPaymentLink(options)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ sbpLink ->
+                    getView()?.hideProgress()
+                    getView()?.sendSbpLink(sbpLink)
+                }, { error ->
+                    when (error) {
+                        is ValidationException -> getView()?.setErrorResult(
+                            ValidationErrorResult(
+                                cause = error.causeMessage,
+                                causeResource = error.causeResource
+                            )
+                        )
+                        else -> getView()?.showErrorScreen()
+                    }
+                })
         )
     }
-
-// todo SDK-9 Продумать обработку ошибок из апи и rx цепочек
-//    private fun handleError(error: Throwable) {
-//        when {
-//            (error as? HttpException)?.code() == 400 -> viewState.sendError(R.string.error_400_code)
-//            (error as? HttpException)?.code() == 404 -> viewState.sendError(R.string.error_404_code)
-//            error is SocketTimeoutException -> viewState.sendError(R.string.error_network_timeout)
-//            error is TimeoutException -> viewState.sendError(R.string.error_timeout)
-//            error is UnknownHostException || error is SocketException -> {
-//                viewState.sendError(R.string.error_network_connection)
-//            }
-//            else -> getView()?.(error.message)
-//        }
-//    }
 
 }

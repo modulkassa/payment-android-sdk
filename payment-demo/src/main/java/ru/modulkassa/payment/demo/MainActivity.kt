@@ -28,7 +28,11 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this@MainActivity, "Платеж завершен", Toast.LENGTH_SHORT).show()
                 }
                 is PaymentResultError -> {
-                    Toast.makeText(this@MainActivity, result.message, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@MainActivity,
+                        result.message + ": " + result.cause,
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
