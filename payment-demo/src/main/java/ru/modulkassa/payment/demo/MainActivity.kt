@@ -6,11 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import ru.modulkassa.payment.demo.databinding.ActivityMainBinding
 import ru.modulkassa.payment.library.ModulPaymentClient
 import ru.modulkassa.payment.library.domain.entity.PaymentOptions
-import ru.modulkassa.payment.library.domain.entity.position.PaymentMethod
-import ru.modulkassa.payment.library.domain.entity.position.PaymentObject
 import ru.modulkassa.payment.library.domain.entity.position.Position
-import ru.modulkassa.payment.library.domain.entity.position.TaxationMode
-import ru.modulkassa.payment.library.domain.entity.position.VatTag
+import ru.modulkassa.payment.library.domain.entity.position.PositionType
 import ru.modulkassa.payment.library.domain.entity.result.PaymentResult
 import ru.modulkassa.payment.library.domain.entity.result.PaymentResultError
 import ru.modulkassa.payment.library.domain.entity.result.PaymentResultSuccess
@@ -60,22 +57,16 @@ class MainActivity : AppCompatActivity() {
             description = "Заказ №14425840",
             positions = listOf(
                 Position(
-                    name = "Первая позиция",
+                    name = "Первый товар",
                     price = BigDecimal.valueOf(1200.10),
                     quantity = BigDecimal.ONE,
-                    taxationMode = TaxationMode.OSN,
-                    paymentObject = PaymentObject.COMMODITY,
-                    paymentMethod = PaymentMethod.FULL_PAYMENT,
-                    vat = VatTag.VAT_20
+                    type = PositionType.COMMODITY
                 ),
                 Position(
-                    name = "Вторая позиция",
+                    name = "Вторая услуга",
                     price = BigDecimal("20"),
                     quantity = BigDecimal.TEN,
-                    taxationMode = TaxationMode.OSN,
-                    paymentObject = PaymentObject.COMMODITY,
-                    paymentMethod = PaymentMethod.FULL_PAYMENT,
-                    vat = VatTag.VAT_20
+                    type = PositionType.SERVICE
                 )
             )
         )

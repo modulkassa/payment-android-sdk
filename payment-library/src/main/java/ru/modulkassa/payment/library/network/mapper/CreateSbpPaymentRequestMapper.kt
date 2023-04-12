@@ -24,11 +24,9 @@ internal class CreateSbpPaymentRequestMapper(
             orderId = options.orderId,
             description = fixLineBreaks(options.description),
             receiptContact = options.receiptContact,
-            receiptItems = gson.toJson(
-                options.positions?.map {
-                    positionToDto(it)
-                }
-            )
+            receiptItems = options.positions?.let { positions ->
+                gson.toJson(positions.map { positionToDto(it) })
+            }
         )
         val generatedSignature = SignatureGenerator(gson).generate(requestDto, options.signatureKey)
         requestDto.signature = generatedSignature
@@ -51,12 +49,12 @@ internal class CreateSbpPaymentRequestMapper(
                 throw ValidationException(causeResource = R.string.error_validation_incorrect_taxation_mode)
             },
             paymentObject = try {
-                PaymentObjectDto.valueOf(position.paymentObject.name)
+                PaymentObjectDto.valueOf(position.type.name)
             } catch (e: IllegalArgumentException) {
                 throw ValidationException(causeResource = R.string.error_validation_incorrect_payment_object)
             },
             paymentMethod = try {
-                PaymentMethodDto.valueOf(position.paymentMethod.name)
+                PaymentMethodDto.valueOf(position.paymentType.name)
             } catch (e: IllegalArgumentException) {
                 throw ValidationException(causeResource = R.string.error_validation_incorrect_payment_method)
             },

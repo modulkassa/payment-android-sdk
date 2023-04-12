@@ -1,6 +1,6 @@
 package ru.modulkassa.payment.library.domain.entity.position
 
-enum class PaymentMethod {
+enum class PaymentType {
     /**
      * Предоплата 100%
      */

@@ -21,19 +21,19 @@ data class Position(
      */
     var quantity: BigDecimal,
     /**
-     * Система налоообложения
-     */
-    val taxationMode: TaxationMode,
-    /**
      * Предмет расчета
      */
-    val paymentObject: PaymentObject,
+    val type: PositionType,
+    /**
+     * Система налоообложения
+     */
+    val taxationMode: TaxationMode = TaxationMode.OSN,
     /**
      * Метод платежа
      */
-    val paymentMethod: PaymentMethod,
+    val paymentType: PaymentType = PaymentType.FULL_PAYMENT,
     /**
      * Ставка НДС
      */
-    val vat: VatTag
+    val vat: VatTag = VatTag.VAT_20
 )
