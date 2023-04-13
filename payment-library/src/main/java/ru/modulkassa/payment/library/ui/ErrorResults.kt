@@ -41,3 +41,8 @@ internal class ValidationErrorResult(
     cause: String? = null,
     causeResource: Int? = null
 ) : BaseErrorResult(R.string.error_result_validation, ErrorType.INVALID_DATA, cause, causeResource)
+
+/**
+ * Неизвестная ошибка
+ */
+internal class UnknownErrorResult() : BaseErrorResult()

@@ -22,13 +22,13 @@ class MainActivity : AppCompatActivity() {
         registerActivityCallback(this@MainActivity) { result: PaymentResult ->
             when (result) {
                 is PaymentResultSuccess -> {
-                    Toast.makeText(this@MainActivity, "Платеж завершен", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MainActivity, "Платеж завершен", Toast.LENGTH_LONG).show()
                 }
                 is PaymentResultError -> {
                     Toast.makeText(
                         this@MainActivity,
                         result.message + ": " + result.cause,
-                        Toast.LENGTH_SHORT
+                        Toast.LENGTH_LONG
                     ).show()
                 }
             }

@@ -1,7 +1,9 @@
 package ru.modulkassa.payment.library.ui
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import ru.modulkassa.payment.library.domain.PaymentOptionsValidator
 import ru.modulkassa.payment.library.domain.PaymentTerminal
 import ru.modulkassa.payment.library.domain.entity.PaymentOptions
 
@@ -10,22 +12,30 @@ internal class PaymentPresenter(
 ) : BaseRxPresenter<PaymentView>(), PaymentUserActions {
 
     override fun checkPaymentOptionsAndShow(options: PaymentOptions) {
-        println("Валидируем поля запроса на оплату $options")
-        // todo проверить на валидность и полноту данных, когда будет известно, какие данные нужны, показать ошибки
-        // PaymentOptionsValidator todo SDK-14 Валидация параметров платежа (табличка в ТЗ)
-
-        getView()?.showDescription(options.description)
-
-        // todo переделаю этот блок в задаче про валидацию данных SDK-14
-        val positions = options.positions
-        if (positions?.isNotEmpty() == true) {
-            getView()?.showPositions(positions)
-            getView()?.showSum(options.calculateAmount())
-        } else {
-            options.amount?.let {
-                getView()?.showSum(it)
-            }
+        Completable.fromAction {
+            PaymentOptionsValidator.validate(options)
         }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                getView()?.showDescription(options.description)
+                val positions = options.positions
+                if (positions?.isNotEmpty() == true) {
+                    getView()?.showPositions(positions)
+                    getView()?.showSum(options.calculateAmount())
+                } else {
+                    options.amount?.let {
+                        getView()?.showSum(it)
+                    }
+                }
+            }, { exception ->
+                val errorResult = if (exception is ValidationException) {
+                    ValidationErrorResult(cause = exception.causeMessage, causeResource = exception.causeResource)
+                } else {
+                    UnknownErrorResult()
+                }
+                getView()?.setErrorResult(errorResult)
+            })
     }
 
     override fun payBySbp(options: PaymentOptions) {
