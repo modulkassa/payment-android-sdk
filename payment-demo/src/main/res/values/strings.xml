@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">payment-android-sdk</string>
     <string name="pay_by_sbp">Оплатить</string>
+    <string name="result_title">Результат:</string>
+    <string name="order_id">ID заказа</string>
+    <string name="create_payment">Создание оплаты</string>
 </resources>

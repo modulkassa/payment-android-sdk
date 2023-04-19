@@ -16,6 +16,10 @@ enum class ErrorType {
      */
     CANCELLED,
     /**
+     * Нет доступного приложения для оплаты
+     */
+    NO_PAYMENT_APP,
+    /**
      * Неизвестный тип
      */
     UNKNOWN

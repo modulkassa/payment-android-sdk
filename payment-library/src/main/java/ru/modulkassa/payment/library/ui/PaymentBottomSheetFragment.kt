@@ -4,11 +4,12 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -38,6 +39,12 @@ internal class PaymentBottomSheetFragment : BottomSheetDialogFragment(), Payment
             gson = GsonFactory.provide()
         )
     )
+
+    private val browserActivityResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
+            println("Проверяем результат оплаты")
+            // todo SDK-21 Запрашивать результат оплаты по orderID
+        }
 
     private var binding: FragmentPaymentBinding? = null
 
@@ -120,8 +127,13 @@ internal class PaymentBottomSheetFragment : BottomSheetDialogFragment(), Payment
     }
 
     override fun sendSbpLink(sbpLink: String) {
-        // todo SDK-15 Пробрасывать интент с СБП ссылкой
-        Toast.makeText(context, sbpLink, Toast.LENGTH_SHORT).show()
+        try {
+            println("Переходим на оплату в банковское приложение")
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(sbpLink))
+            browserActivityResultLauncher.launch(browserIntent)
+        } catch (exception: java.lang.NullPointerException) {
+            setErrorResult(NoPaymentAppErrorResult())
+        }
     }
 
     override fun showErrorScreen() {

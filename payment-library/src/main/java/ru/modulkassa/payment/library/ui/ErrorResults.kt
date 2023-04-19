@@ -46,3 +46,8 @@ internal class ValidationErrorResult(
  * Неизвестная ошибка
  */
 internal class UnknownErrorResult() : BaseErrorResult()
+
+/**
+ * Нет доступного приложения для оплаты
+ */
+internal class NoPaymentAppErrorResult : BaseErrorResult(R.string.error_result_no_payment_app, ErrorType.NO_PAYMENT_APP)
