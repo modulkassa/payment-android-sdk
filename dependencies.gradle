@@ -1,4 +1,4 @@
-ext.versions = [minSdk                  : 21,
+ext.versions = [minSdk                  : 23,
                 targetSdk               : 33,
                 compileSdk              : 33,
                 buildTools              : '33.0.0',
@@ -33,4 +33,6 @@ ext.libraries = [kotlin                 : "org.jetbrains.kotlin:kotlin-stdlib:$v
                  retrofitRx             : "com.squareup.retrofit2:adapter-rxjava3:$versions.retrofit",
 
                  loggingInterceptor     : "com.squareup.okhttp3:logging-interceptor:4.10.0",
+
+                 securityCrypto         : "androidx.security:security-crypto:1.0.0",
 ]

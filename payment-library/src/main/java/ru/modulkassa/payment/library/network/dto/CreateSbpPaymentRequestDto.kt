@@ -1,7 +1,6 @@
 package ru.modulkassa.payment.library.network.dto
 
 import com.google.gson.annotations.SerializedName
-import java.util.UUID
 
 internal data class CreateSbpPaymentRequestDto(
     /**
@@ -30,22 +29,5 @@ internal data class CreateSbpPaymentRequestDto(
      * Позиции чека
      */
     @SerializedName("receipt_items")
-    val receiptItems: String? = null,
-
-    /**
-     * Криптографическая подпись
-     */
-    var signature: String? = null
-) {
-    /**
-     * Текущее дата и время
-     */
-    @SerializedName("unix_timestamp")
-    val unixTimestamp: String = (System.currentTimeMillis() / 1000).toString()
-
-    /**
-     * Случайная величина
-     * Строка (максимум 32 символа), допускаются только печатные ASCII символы
-     */
-    val salt: String = UUID.randomUUID().toString().take(32)
-}
+    val receiptItems: String? = null
+) : BaseRequestDto()

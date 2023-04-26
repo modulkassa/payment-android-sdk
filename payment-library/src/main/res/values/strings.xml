@@ -11,6 +11,9 @@
     <string name="error_validation_incorrect_payment_method">Указан неизвестный метод платежа</string>
     <string name="error_validation_incorrect_vat_tag">Указана неизвестная ставка НДС</string>
 
+    <string name="error_validation_no_merchant_id">Невозможно прочитать ключ мерчанта. Проинициализируйте клиента для работы с SDK</string>
+    <string name="error_validation_no_signature_key">Невозможно прочитать ключ подписи. Проинициализируйте клиента для работы с SDK</string>
+
     <string name="error_result_no_payment_options">Не указаны параметры оплаты</string>
     <string name="error_result_cancelled_by_user">Отменено пользователем</string>
     <string name="error_result_validation">Ошибка валидации параметров оплаты</string>

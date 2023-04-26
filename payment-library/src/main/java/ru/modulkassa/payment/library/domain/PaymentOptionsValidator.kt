@@ -14,13 +14,6 @@ internal object PaymentOptionsValidator {
     fun validate(options: PaymentOptions) {
         println("Валидируем поля запроса на оплату $options")
 
-        FieldValidator(options.merchantId, "merchantId")
-            .apply {
-                checkNotBlank()
-                checkLength(128)
-                checkOnlyPrintableAscii()
-            }
-
         if (options.positions.isNullOrEmpty() && options.amount == null) {
             throw ValidationException("Необходимо указать либо позиции для оплаты, либо сумму для оплаты")
         }

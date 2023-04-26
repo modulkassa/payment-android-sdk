@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import ru.modulkassa.payment.library.DefaultSettingsRepository
 import ru.modulkassa.payment.library.R
 import ru.modulkassa.payment.library.databinding.FragmentPaymentBinding
 import ru.modulkassa.payment.library.domain.PaymentTerminalImpl
@@ -33,12 +34,7 @@ internal class PaymentBottomSheetFragment : BottomSheetDialogFragment(), Payment
         }
     }
 
-    private val presenter = PaymentPresenter(
-        PaymentTerminalImpl(
-            api = NetworkModule.payApi,
-            gson = GsonFactory.provide()
-        )
-    )
+    private var presenter: PaymentPresenter? = null
 
     private val browserActivityResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
@@ -61,17 +57,24 @@ internal class PaymentBottomSheetFragment : BottomSheetDialogFragment(), Payment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        presenter.attachView(this)
+        presenter = PaymentPresenter(
+            PaymentTerminalImpl(
+                api = NetworkModule.payApi,
+                gson = GsonFactory.provide(),
+                repository = DefaultSettingsRepository(requireContext())
+            )
+        )
+        presenter?.attachView(this)
 
         val options = requireActivity().intent.extras?.let { PaymentOptions.fromBundle(it) }
         if (options != null) {
-            presenter.checkPaymentOptionsAndShow(options)
+            presenter?.checkPaymentOptionsAndShow(options)
 
             binding?.payBySbp?.setOnClickListener {
-                presenter.payBySbp(options)
+                presenter?.payBySbp(options)
             }
             binding?.retry?.setOnClickListener {
-                presenter.payBySbp(options)
+                presenter?.payBySbp(options)
             }
         } else {
             setErrorResult(NoPaymentOptionsErrorResult())
@@ -79,7 +82,7 @@ internal class PaymentBottomSheetFragment : BottomSheetDialogFragment(), Payment
     }
 
     override fun onDestroyView() {
-        presenter.detachView()
+        presenter?.detachView()
         super.onDestroyView()
         binding = null
     }

@@ -1,8 +1,8 @@
 package ru.modulkassa.payment.library.domain.entity
 
 import android.os.Bundle
-import ru.modulkassa.payment.library.network.GsonFactory
 import ru.modulkassa.payment.library.domain.entity.position.Position
+import ru.modulkassa.payment.library.network.GsonFactory
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -16,16 +16,6 @@ class PaymentOptions private constructor(
     val positions: List<Position>? = null,
     val receiptContact: String? = null
 ) : Bundable {
-
-    /**
-     * Идентификатор магазина, который выдается в личном кабинете на этапе интеграции
-     */
-    internal lateinit var merchantId: String
-
-    /**
-     * Ключ для криптографической подписи
-     */
-    internal lateinit var signatureKey: String
 
     companion object {
         const val KEY_SERIALIZED_PAYMENT_OPTIONS = "key_serialized_payment_options"
@@ -77,11 +67,6 @@ class PaymentOptions private constructor(
             val serializedPaymentOptions = GsonFactory.provide().toJson(this)
             it.putString(KEY_SERIALIZED_PAYMENT_OPTIONS, serializedPaymentOptions)
         }
-    }
-
-    override fun toString(): String {
-        return "PaymentOptions(orderId='$orderId', description='$description', amount=$amount, " +
-            "positions=$positions, receiptContact=$receiptContact)"
     }
 
     internal fun calculateAmount(): BigDecimal {

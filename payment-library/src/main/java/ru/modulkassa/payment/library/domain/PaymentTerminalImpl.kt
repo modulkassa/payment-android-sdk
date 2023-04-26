@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.core.SingleSource
 import retrofit2.HttpException
+import ru.modulkassa.payment.library.SettingsRepository
 import ru.modulkassa.payment.library.domain.entity.PaymentOptions
 import ru.modulkassa.payment.library.network.PaymentApi
 import ru.modulkassa.payment.library.network.dto.ErrorResponseDto
@@ -12,13 +13,14 @@ import ru.modulkassa.payment.library.ui.ValidationException
 
 internal class PaymentTerminalImpl(
     private val api: PaymentApi,
-    private val gson: Gson
+    private val gson: Gson,
+    private val repository: SettingsRepository
 ) : PaymentTerminal {
 
     override fun createSbpPaymentLink(options: PaymentOptions): Single<String> {
         println("Инициируем запрос на создание СБП оплаты с параметрами $options")
         return Single.fromCallable {
-            CreateSbpPaymentRequestMapper(gson).toDto(options)
+            CreateSbpPaymentRequestMapper(gson, repository).toDto(options)
         }.flatMap {
             api.createSbpPayment(it)
                 .map { it.sbpLink }

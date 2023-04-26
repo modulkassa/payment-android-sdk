@@ -17,27 +17,6 @@ class PaymentOptionsValidatorTest {
     }
 
     @Test
-    fun Validate_TooLongMerchantId_ExceptionCought() {
-        assertFailsWith(ValidationException::class) {
-            PaymentOptionsValidator.validate(createDefaultOptions(merchant = "1".repeat(129)))
-        }
-    }
-
-    @Test
-    fun Validate_MerchantIdIsBlank_ExceptionCought() {
-        assertFailsWith(ValidationException::class) {
-            PaymentOptionsValidator.validate(createDefaultOptions(merchant = "   "))
-        }
-    }
-
-    @Test
-    fun Validate_MerchantIdNotAscii_ExceptionCought() {
-        assertFailsWith(ValidationException::class) {
-            PaymentOptionsValidator.validate(createDefaultOptions(merchant = 16.toChar().toString()))
-        }
-    }
-
-    @Test
     fun Validate_NoPositionsNoAmount_ExceptionCought() {
         assertFailsWith(ValidationException::class) {
             PaymentOptionsValidator.validate(createDefaultOptions(amount = null, positions = null))
@@ -209,17 +188,12 @@ class PaymentOptionsValidatorTest {
                 type = PositionType.COMMODITY
             )
         ),
-        receiptContact: String? = null,
-        merchant: String = "12345678-1234-1234-1234-123456789123",
-        signature: String = "AABBCCDDEEAABBCCDDEEAABBCCDDEEAA"
+        receiptContact: String? = null
     ) = PaymentOptions.createSbpOptions(
         orderId = orderId,
         description = description,
         amount = amount,
         positions = positions,
         receiptContact = receiptContact
-    ).apply {
-        merchantId = merchant
-        signatureKey = signature
-    }
+    )
 }

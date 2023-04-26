@@ -50,6 +50,8 @@ dependencies {
 
     implementation libraries.loggingInterceptor
 
+    implementation libraries.securityCrypto
+
     testImplementation libraries.junit
     testImplementation libraries.mockitoKotlin
     testImplementation libraries.truth

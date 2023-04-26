@@ -3,7 +3,7 @@ package ru.modulkassa.payment.library.network
 import android.util.Base64
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import ru.modulkassa.payment.library.network.dto.CreateSbpPaymentRequestDto
+import ru.modulkassa.payment.library.network.dto.BaseRequestDto
 import java.security.MessageDigest
 
 /**
@@ -14,7 +14,7 @@ internal class SignatureGenerator(
     private val gson: Gson
 ) {
     fun generate(
-        requestDto: CreateSbpPaymentRequestDto,
+        requestDto: BaseRequestDto,
         secretKey: String
     ): String {
 

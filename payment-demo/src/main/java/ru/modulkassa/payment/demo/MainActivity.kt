@@ -16,11 +16,8 @@ import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
-    private val modulPaymentClient = ModulPaymentClient(
-        merchantId = BuildConfig.MERCHANT_ID,
-        signatureKey = BuildConfig.SIGNATURE_KEY
-    ).apply {
-        registerActivityCallback(this@MainActivity) { result: PaymentResult ->
+    private val modulPaymentClient = ModulPaymentClient().apply {
+        registerPaymentCallback(this@MainActivity) { result: PaymentResult ->
             when (result) {
                 is PaymentResultSuccess -> {
                     Toast.makeText(this@MainActivity, "Платеж завершен", Toast.LENGTH_LONG).show()
@@ -41,6 +38,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        modulPaymentClient.init(
+            this,
+            merchantId = BuildConfig.MERCHANT_ID,
+            signatureKey = BuildConfig.SIGNATURE_KEY
+        )
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root

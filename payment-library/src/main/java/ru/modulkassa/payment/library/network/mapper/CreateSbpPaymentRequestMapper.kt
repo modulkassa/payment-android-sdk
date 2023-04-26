@@ -2,6 +2,7 @@ package ru.modulkassa.payment.library.network.mapper
 
 import com.google.gson.Gson
 import ru.modulkassa.payment.library.R
+import ru.modulkassa.payment.library.SettingsRepository
 import ru.modulkassa.payment.library.domain.entity.PaymentOptions
 import ru.modulkassa.payment.library.domain.entity.position.Position
 import ru.modulkassa.payment.library.network.BigDecimalFormatter
@@ -15,11 +16,13 @@ import ru.modulkassa.payment.library.network.dto.position.VatTagDto
 import ru.modulkassa.payment.library.ui.ValidationException
 
 internal class CreateSbpPaymentRequestMapper(
-    private val gson: Gson
+    private val gson: Gson,
+    private val repository: SettingsRepository
 ) {
     fun toDto(options: PaymentOptions): CreateSbpPaymentRequestDto {
         val requestDto = CreateSbpPaymentRequestDto(
-            merchant = options.merchantId,
+            merchant = repository.getMerchantId()
+                ?: throw ValidationException(causeResource = R.string.error_validation_no_merchant_id),
             amount = BigDecimalFormatter.format(options.amount ?: options.calculateAmount()),
             orderId = options.orderId,
             description = fixLineBreaks(options.description),
@@ -28,7 +31,9 @@ internal class CreateSbpPaymentRequestMapper(
                 gson.toJson(positions.map { positionToDto(it) })
             }
         )
-        val generatedSignature = SignatureGenerator(gson).generate(requestDto, options.signatureKey)
+        val signatureKey = repository.getSignatureKey()
+            ?: throw ValidationException(causeResource = R.string.error_validation_no_signature_key)
+        val generatedSignature = SignatureGenerator(gson).generate(requestDto, signatureKey)
         requestDto.signature = generatedSignature
         return requestDto
     }
