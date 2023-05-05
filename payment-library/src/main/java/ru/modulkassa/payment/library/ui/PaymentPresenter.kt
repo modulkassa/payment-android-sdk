@@ -8,8 +8,7 @@ import ru.modulkassa.payment.library.R
 import ru.modulkassa.payment.library.domain.PaymentOptionsValidator
 import ru.modulkassa.payment.library.domain.PaymentTerminal
 import ru.modulkassa.payment.library.domain.entity.PaymentOptions
-import ru.modulkassa.payment.library.domain.entity.result.ErrorType
-import ru.modulkassa.payment.library.domain.entity.result.PaymentResultSuccess
+import java.util.concurrent.TimeoutException
 
 internal class PaymentPresenter(
     private val paymentTerminal: PaymentTerminal
@@ -61,16 +60,7 @@ internal class PaymentPresenter(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ result ->
-                    if (result.isSuccess) {
-                        getView()?.setSuccessResult(PaymentResultSuccess(result.transactionId ?: ""))
-                    } else {
-                        getView()?.setErrorResult(
-                            BaseErrorResult(
-                                stringResource = R.string.error_unknown_payment_result,
-                                type = ErrorType.UNKNOWN_PAYMENT_RESULT
-                            )
-                        )
-                    }
+                    getView()?.setSuccessResult(result)
                 }, { error ->
                     handleError(error, R.string.error_unknown_payment_result)
                 })
@@ -83,6 +73,9 @@ internal class PaymentPresenter(
                 cause = exception.causeMessage,
                 causeResource = exception.causeResource
             )
+            is TimeoutException -> TimeoutErrorResult()
+            is NetworkException -> NetworkErrorResult(exception.causeMessage)
+            is PaymentFailedException -> PaymentFailedErrorResult(exception.causeMessage)
             else -> BaseErrorResult(
                 stringResource = defaultResource,
                 cause = exception.message ?: exception.stackTraceToString()

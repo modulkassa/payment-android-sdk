@@ -14,7 +14,7 @@
     <string name="error_validation_no_merchant_id">Невозможно прочитать ключ мерчанта. Проинициализируйте клиента для работы с SDK</string>
     <string name="error_validation_no_signature_key">Невозможно прочитать ключ подписи. Проинициализируйте клиента для работы с SDK</string>
 
-    <string name="error_unknown_validation">Произошла неизвестная ошибка во время валидации параметров оплаты</string>
+    <string name="error_unknown_validation">Произошла ошибка во время валидации параметров оплаты</string>
     <string name="error_unknown_create_payment">Произошла ошибка при обработке запроса на создание оплаты</string>
     <string name="error_unknown_payment_result">Произошла ошибка при получении статуса платежа</string>
 
@@ -22,5 +22,8 @@
     <string name="error_result_cancelled_by_user">Отменено пользователем</string>
     <string name="error_result_validation">Ошибка валидации параметров оплаты</string>
     <string name="error_result_no_payment_app">Нет доступного приложения для оплаты</string>
+    <string name="error_result_network">Сетевая ошибка выполнения запроса</string>
+    <string name="error_result_payment_failed">Оплата не прошла</string>
+    <string name="error_result_timeout">Результат оплаты неизвестен</string>
     <string name="error_unknown">Неизвестная ошибка</string>
 </resources>

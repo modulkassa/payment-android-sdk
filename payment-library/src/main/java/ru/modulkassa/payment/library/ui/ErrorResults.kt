@@ -9,7 +9,7 @@ import ru.modulkassa.payment.library.domain.entity.result.PaymentResultError
 internal open class BaseErrorResult(
     @StringRes
     private val stringResource: Int = R.string.error_unknown,
-    private val type: ErrorType = ErrorType.UNKNOWN,
+    private val type: ErrorType = ErrorType.FAILED,
     private val cause: String? = null,
     @StringRes
     private val causeResource: Int? = null
@@ -24,15 +24,15 @@ internal open class BaseErrorResult(
 }
 
 /**
+ * Отменено пользователем
+ */
+internal class CanceledByUserErrorResult : BaseErrorResult(R.string.error_result_cancelled_by_user, ErrorType.CANCELLED)
+
+/**
  * Не указаны параметры оплаты
  */
 internal class NoPaymentOptionsErrorResult :
     BaseErrorResult(R.string.error_result_no_payment_options, ErrorType.INVALID_DATA)
-
-/**
- * Отменено пользователем
- */
-internal class CanceledByUserErrorResult : BaseErrorResult(R.string.error_result_cancelled_by_user, ErrorType.CANCELLED)
 
 /**
  * Ошибка валидации данных при создании платежа
@@ -45,4 +45,23 @@ internal class ValidationErrorResult(
 /**
  * Нет доступного приложения для оплаты
  */
-internal class NoPaymentAppErrorResult : BaseErrorResult(R.string.error_result_no_payment_app, ErrorType.NO_PAYMENT_APP)
+internal class NoPaymentAppErrorResult : BaseErrorResult(R.string.error_result_no_payment_app, ErrorType.FAILED)
+
+/**
+ * Сетевая ошибка выполнения запроса
+ */
+internal class NetworkErrorResult(
+    cause: String? = null
+) : BaseErrorResult(R.string.error_result_network, ErrorType.FAILED, cause)
+
+/**
+ * Оплата не прошла
+ */
+internal class PaymentFailedErrorResult(
+    cause: String? = null
+) : BaseErrorResult(R.string.error_result_payment_failed, ErrorType.FAILED, cause)
+
+/**
+ * Результат оплаты неизвестен
+ */
+internal class TimeoutErrorResult : BaseErrorResult(R.string.error_result_timeout, ErrorType.FAILED)

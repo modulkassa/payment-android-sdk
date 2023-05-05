@@ -24,7 +24,8 @@ internal data class TransactionDto(
     @SerializedName("auth_code")
     val authCode: String? = null,
     @SerializedName("auth_number")
-    val authNumber: String? = null
+    val authNumber: String? = null,
+    val message: String? = null
 )
 
 internal enum class TransactionStateDto {

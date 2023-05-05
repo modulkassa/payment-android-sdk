@@ -7,18 +7,19 @@ import retrofit2.HttpException
 import ru.modulkassa.payment.library.R
 import ru.modulkassa.payment.library.SettingsRepository
 import ru.modulkassa.payment.library.domain.entity.PaymentOptions
-import ru.modulkassa.payment.library.domain.entity.PaymentStatus
+import ru.modulkassa.payment.library.domain.entity.result.PaymentResultSuccess
 import ru.modulkassa.payment.library.network.PaymentApi
 import ru.modulkassa.payment.library.network.SignatureGenerator
 import ru.modulkassa.payment.library.network.dto.BaseRequestDto
-import ru.modulkassa.payment.library.network.dto.SbpPaymentLinkRequestDto
 import ru.modulkassa.payment.library.network.dto.ErrorResponseDto
+import ru.modulkassa.payment.library.network.dto.SbpPaymentLinkRequestDto
 import ru.modulkassa.payment.library.network.dto.TransactionRequestDto
 import ru.modulkassa.payment.library.network.dto.TransactionStateDto
 import ru.modulkassa.payment.library.network.mapper.SbpPaymentLinkRequestMapper
+import ru.modulkassa.payment.library.ui.NetworkException
+import ru.modulkassa.payment.library.ui.PaymentFailedException
 import ru.modulkassa.payment.library.ui.ValidationException
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.TimeoutException
 
 internal class PaymentTerminalImpl(
     private val api: PaymentApi,
@@ -40,7 +41,7 @@ internal class PaymentTerminalImpl(
     }
 
     // todo SDK-22 Проверить метод апи getTransaction(), когда сервер сделает
-    override fun getPaymentStatus(options: PaymentOptions): Single<PaymentStatus> {
+    override fun getPaymentStatus(options: PaymentOptions): Single<PaymentResultSuccess> {
         println("Начинаем проверку статуса платежа с orderId=${options.orderId}")
         return Single.fromCallable {
             val merchant = repository.getMerchantId()
@@ -62,16 +63,19 @@ internal class PaymentTerminalImpl(
                 .repeatWhen { it.delay(2, TimeUnit.SECONDS) }
                 .takeUntil { it.state in listOf(TransactionStateDto.COMPLETE, TransactionStateDto.FAILED) }
                 .filter { it.state in listOf(TransactionStateDto.COMPLETE, TransactionStateDto.FAILED) }
-                .map { PaymentStatus(isSuccess = true, transactionId = it.transactionId ?: "") }
-                .first(PaymentStatus(isSuccess = false))
-                .timeout(10, TimeUnit.SECONDS)
-                .onErrorResumeNext { error ->
-                    if (error is TimeoutException) {
-                        Single.just(PaymentStatus(isSuccess = false))
-                    } else {
-                        handleNetworkError(error) as SingleSource<PaymentStatus>
+                .firstOrError()
+                .map {
+                    when (it.state) {
+                        TransactionStateDto.COMPLETE -> {
+                            PaymentResultSuccess(transactionId = it.transactionId ?: "")
+                        }
+                        else -> {
+                            throw PaymentFailedException(it.message)
+                        }
                     }
                 }
+                .timeout(10, TimeUnit.SECONDS)
+                .onErrorResumeNext { handleNetworkError(it) as SingleSource<PaymentResultSuccess> }
         }
     }
 
@@ -94,7 +98,7 @@ internal class PaymentTerminalImpl(
             errorResponse.formErrors?.let { formErrors ->
                 println(formErrors)
             }
-            Single.error<Any>(ValidationException(causeMessage = errorResponse.message))
+            Single.error<Any>(NetworkException(causeMessage = errorResponse.message))
         } ?: Single.error<Any>(throwable)
     }
 }

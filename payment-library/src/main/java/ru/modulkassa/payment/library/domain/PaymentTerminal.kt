@@ -2,7 +2,7 @@ package ru.modulkassa.payment.library.domain
 
 import io.reactivex.rxjava3.core.Single
 import ru.modulkassa.payment.library.domain.entity.PaymentOptions
-import ru.modulkassa.payment.library.domain.entity.PaymentStatus
+import ru.modulkassa.payment.library.domain.entity.result.PaymentResultSuccess
 
 /**
  * Интерфейс терминала для проведения операции оплаты
@@ -18,5 +18,5 @@ internal interface PaymentTerminal {
     /**
      * Получить результат окончания процесса оплаты
      */
-    fun getPaymentStatus(options: PaymentOptions): Single<PaymentStatus>
+    fun getPaymentStatus(options: PaymentOptions): Single<PaymentResultSuccess>
 }

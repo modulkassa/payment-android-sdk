@@ -1,7 +1,7 @@
 package ru.modulkassa.payment.library.domain.entity.result
 
 import android.os.Bundle
-import ru.modulkassa.payment.library.domain.entity.result.ErrorType.UNKNOWN
+import ru.modulkassa.payment.library.domain.entity.result.ErrorType.FAILED
 
 /**
  * Типы ошибок
@@ -11,22 +11,16 @@ enum class ErrorType {
      * Данные запроса невалидны
      */
     INVALID_DATA,
+
     /**
      * Операция была отменена пользователем
      */
     CANCELLED,
+
     /**
-     * Нет доступного приложения для оплаты
+     * Операция завершилась с ошибкой
      */
-    NO_PAYMENT_APP,
-    /**
-     * Невозможно получить результат оплаты
-     */
-    UNKNOWN_PAYMENT_RESULT,
-    /**
-     * Неизвестный тип
-     */
-    UNKNOWN
+    FAILED
 }
 
 /**
@@ -56,12 +50,12 @@ data class PaymentResultError(
 
         fun fromBundle(data: Bundle?): PaymentResultError {
             return if (data == null) {
-                PaymentResultError(DEFAULT_MESSAGE, UNKNOWN)
+                PaymentResultError(DEFAULT_MESSAGE, FAILED)
             } else {
                 val type = try {
                     ErrorType.valueOf(data.getString(KEY_ERROR_TYPE, ""))
                 } catch (error: IllegalArgumentException) {
-                    UNKNOWN
+                    FAILED
                 }
                 PaymentResultError(
                     message = data.getString(KEY_ERROR_MESSAGE, DEFAULT_MESSAGE),

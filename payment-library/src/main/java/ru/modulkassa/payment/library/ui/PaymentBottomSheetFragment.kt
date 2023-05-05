@@ -78,10 +78,6 @@ internal class PaymentBottomSheetFragment : BottomSheetDialogFragment(), Payment
             binding?.payBySbp?.setOnClickListener {
                 presenter?.payBySbp(paymentOptions)
             }
- // todo удалить из разметки экран с ошибкой
-//            binding?.retry?.setOnClickListener {
-//                presenter?.payBySbp(paymentOptions)
-//            }
         } else {
             setErrorResult(NoPaymentOptionsErrorResult())
         }
@@ -131,7 +127,6 @@ internal class PaymentBottomSheetFragment : BottomSheetDialogFragment(), Payment
 
     override fun showProgress(@StringRes progressResource: Int) {
         binding?.descriptionLayout?.visibility = View.INVISIBLE
-        binding?.errorLayout?.visibility = View.GONE
         binding?.progressLayout?.visibility = View.VISIBLE
         binding?.progressTitle?.text = getString(progressResource)
     }

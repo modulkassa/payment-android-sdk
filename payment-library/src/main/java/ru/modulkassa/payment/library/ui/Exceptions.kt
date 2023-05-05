@@ -10,3 +10,17 @@ internal class ValidationException(
     @StringRes
     val causeResource: Int? = null
 ) : Exception(causeMessage)
+
+/**
+ * Ошибка при сетевом запросе
+ */
+internal class NetworkException(
+    val causeMessage: String? = null
+) : Exception(causeMessage)
+
+/**
+ * Оплата завершилась с ошибкой
+ */
+internal class PaymentFailedException(
+    val causeMessage: String? = null
+) : Exception()
