@@ -1,7 +1,10 @@
 package ru.modulkassa.payment.library.ui
 
+import androidx.annotation.StringRes
 import ru.modulkassa.payment.library.domain.entity.PaymentOptions
 import ru.modulkassa.payment.library.domain.entity.position.Position
+import ru.modulkassa.payment.library.domain.entity.result.PaymentResult
+import ru.modulkassa.payment.library.domain.entity.result.PaymentResultSuccess
 import java.math.BigDecimal
 
 internal interface PaymentView : BaseView {
@@ -10,6 +13,11 @@ internal interface PaymentView : BaseView {
      * Закрыть экран с ошибкой
      */
     fun setErrorResult(error: BaseErrorResult)
+
+    /**
+     * Закрыть экран с успехом
+     */
+    fun setSuccessResult(result: PaymentResultSuccess)
 
     /**
      * Отобразить описание платежа
@@ -29,7 +37,7 @@ internal interface PaymentView : BaseView {
     /**
      * Показать прогресс
      */
-    fun showProgress()
+    fun showProgress(@StringRes progressResource: Int)
 
     /**
      * Скрыть прогресс
@@ -40,11 +48,6 @@ internal interface PaymentView : BaseView {
      * Послать СБП ссылку установленным приложениям
      */
     fun sendSbpLink(sbpLink: String)
-
-    /**
-     * Отобразить экран с ошибкой
-     */
-    fun showErrorScreen()
 
 }
 
@@ -59,4 +62,9 @@ internal interface PaymentUserActions : BaseUserActions<PaymentView> {
      * Провести оплату по СБП
      */
     fun payBySbp(options: PaymentOptions)
+
+    /**
+     * Дождаться результат оплаты
+     */
+    fun getPaymentResult(options: PaymentOptions)
 }

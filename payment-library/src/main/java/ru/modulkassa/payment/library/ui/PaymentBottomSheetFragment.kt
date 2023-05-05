@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.StringRes
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -20,6 +21,7 @@ import ru.modulkassa.payment.library.databinding.FragmentPaymentBinding
 import ru.modulkassa.payment.library.domain.PaymentTerminalImpl
 import ru.modulkassa.payment.library.domain.entity.PaymentOptions
 import ru.modulkassa.payment.library.domain.entity.position.Position
+import ru.modulkassa.payment.library.domain.entity.result.PaymentResultSuccess
 import ru.modulkassa.payment.library.network.GsonFactory
 import ru.modulkassa.payment.library.network.NetworkModule
 import java.math.BigDecimal
@@ -38,9 +40,10 @@ internal class PaymentBottomSheetFragment : BottomSheetDialogFragment(), Payment
 
     private val browserActivityResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
-            println("Проверяем результат оплаты")
-            // todo SDK-21 Запрашивать результат оплаты по orderID
+            presenter?.getPaymentResult(paymentOptions)
         }
+
+    private lateinit var paymentOptions: PaymentOptions
 
     private var binding: FragmentPaymentBinding? = null
 
@@ -68,14 +71,17 @@ internal class PaymentBottomSheetFragment : BottomSheetDialogFragment(), Payment
 
         val options = requireActivity().intent.extras?.let { PaymentOptions.fromBundle(it) }
         if (options != null) {
-            presenter?.checkPaymentOptionsAndShow(options)
+            paymentOptions = options
+
+            presenter?.checkPaymentOptionsAndShow(paymentOptions)
 
             binding?.payBySbp?.setOnClickListener {
-                presenter?.payBySbp(options)
+                presenter?.payBySbp(paymentOptions)
             }
-            binding?.retry?.setOnClickListener {
-                presenter?.payBySbp(options)
-            }
+ // todo удалить из разметки экран с ошибкой
+//            binding?.retry?.setOnClickListener {
+//                presenter?.payBySbp(paymentOptions)
+//            }
         } else {
             setErrorResult(NoPaymentOptionsErrorResult())
         }
@@ -95,6 +101,11 @@ internal class PaymentBottomSheetFragment : BottomSheetDialogFragment(), Payment
     override fun setErrorResult(error: BaseErrorResult) {
         val result = error.toPaymentResultError(requireContext())
         requireActivity().setResult(Activity.RESULT_CANCELED, Intent().apply { putExtras(result.toBundle()) })
+        requireActivity().finish()
+    }
+
+    override fun setSuccessResult(result: PaymentResultSuccess) {
+        requireActivity().setResult(Activity.RESULT_OK, Intent().apply { putExtras(result.toBundle()) })
         requireActivity().finish()
     }
 
@@ -118,11 +129,11 @@ internal class PaymentBottomSheetFragment : BottomSheetDialogFragment(), Payment
         binding?.summary?.text = RubSuffixSumFormatter().format(sum)
     }
 
-    override fun showProgress() {
+    override fun showProgress(@StringRes progressResource: Int) {
         binding?.descriptionLayout?.visibility = View.INVISIBLE
         binding?.errorLayout?.visibility = View.GONE
         binding?.progressLayout?.visibility = View.VISIBLE
-        binding?.progressTitle?.text = getString(R.string.create_payment_progress)
+        binding?.progressTitle?.text = getString(progressResource)
     }
 
     override fun hideProgress() {
@@ -137,10 +148,5 @@ internal class PaymentBottomSheetFragment : BottomSheetDialogFragment(), Payment
         } catch (exception: java.lang.NullPointerException) {
             setErrorResult(NoPaymentAppErrorResult())
         }
-    }
-
-    override fun showErrorScreen() {
-        binding?.progressLayout?.visibility = View.GONE
-        binding?.errorLayout?.visibility = View.VISIBLE
     }
 }

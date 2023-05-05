@@ -8,24 +8,24 @@ import android.os.Bundle
 data class PaymentResultSuccess(
     // todo изменить поля, согласно данным от сервера
     // todo SDK-10 Формат данных для ответа исходя из данных по АПИ
-    val paymentId: String
+    val transactionId: String
 ) : PaymentResult() {
 
     companion object {
-        private const val KEY_PAYMENT_ID = "key_payment_id"
+        private const val KEY_TRANSACTION_ID = "key_transaction_id"
 
         fun fromBundle(data: Bundle?): PaymentResultSuccess {
             return if (data == null) {
                 PaymentResultSuccess("")
             } else {
-                PaymentResultSuccess(data.getString(KEY_PAYMENT_ID, ""))
+                PaymentResultSuccess(data.getString(KEY_TRANSACTION_ID, ""))
             }
         }
     }
 
     override fun toBundle(): Bundle {
         return Bundle().apply {
-            putString(KEY_PAYMENT_ID, paymentId)
+            putString(KEY_TRANSACTION_ID, transactionId)
         }
     }
 }

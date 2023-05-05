@@ -2,7 +2,7 @@ package ru.modulkassa.payment.library.network.dto
 
 import com.google.gson.annotations.SerializedName
 
-internal data class CreateSbpPaymentRequestDto(
+internal data class SbpPaymentLinkRequestDto(
     /**
      * Идентификатор магазина, который выдается в личном кабинете на этапе интеграции
      */

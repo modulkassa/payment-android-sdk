@@ -20,6 +20,10 @@ enum class ErrorType {
      */
     NO_PAYMENT_APP,
     /**
+     * Невозможно получить результат оплаты
+     */
+    UNKNOWN_PAYMENT_RESULT,
+    /**
      * Неизвестный тип
      */
     UNKNOWN

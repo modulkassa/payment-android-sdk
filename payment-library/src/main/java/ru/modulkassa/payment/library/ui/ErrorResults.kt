@@ -6,7 +6,7 @@ import ru.modulkassa.payment.library.R
 import ru.modulkassa.payment.library.domain.entity.result.ErrorType
 import ru.modulkassa.payment.library.domain.entity.result.PaymentResultError
 
-internal sealed class BaseErrorResult(
+internal open class BaseErrorResult(
     @StringRes
     private val stringResource: Int = R.string.error_unknown,
     private val type: ErrorType = ErrorType.UNKNOWN,
@@ -41,11 +41,6 @@ internal class ValidationErrorResult(
     cause: String? = null,
     causeResource: Int? = null
 ) : BaseErrorResult(R.string.error_result_validation, ErrorType.INVALID_DATA, cause, causeResource)
-
-/**
- * Неизвестная ошибка
- */
-internal class UnknownErrorResult() : BaseErrorResult()
 
 /**
  * Нет доступного приложения для оплаты

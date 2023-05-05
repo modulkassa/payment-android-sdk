@@ -6,8 +6,7 @@ import ru.modulkassa.payment.library.SettingsRepository
 import ru.modulkassa.payment.library.domain.entity.PaymentOptions
 import ru.modulkassa.payment.library.domain.entity.position.Position
 import ru.modulkassa.payment.library.network.BigDecimalFormatter
-import ru.modulkassa.payment.library.network.SignatureGenerator
-import ru.modulkassa.payment.library.network.dto.CreateSbpPaymentRequestDto
+import ru.modulkassa.payment.library.network.dto.SbpPaymentLinkRequestDto
 import ru.modulkassa.payment.library.network.dto.position.PaymentMethodDto
 import ru.modulkassa.payment.library.network.dto.position.PaymentObjectDto
 import ru.modulkassa.payment.library.network.dto.position.PositionDto
@@ -15,12 +14,12 @@ import ru.modulkassa.payment.library.network.dto.position.TaxationModeDto
 import ru.modulkassa.payment.library.network.dto.position.VatTagDto
 import ru.modulkassa.payment.library.ui.ValidationException
 
-internal class CreateSbpPaymentRequestMapper(
+internal class SbpPaymentLinkRequestMapper(
     private val gson: Gson,
     private val repository: SettingsRepository
 ) {
-    fun toDto(options: PaymentOptions): CreateSbpPaymentRequestDto {
-        val requestDto = CreateSbpPaymentRequestDto(
+    fun toDto(options: PaymentOptions): SbpPaymentLinkRequestDto {
+        val requestDto = SbpPaymentLinkRequestDto(
             merchant = repository.getMerchantId()
                 ?: throw ValidationException(causeResource = R.string.error_validation_no_merchant_id),
             amount = BigDecimalFormatter.format(options.amount ?: options.calculateAmount()),
@@ -31,10 +30,6 @@ internal class CreateSbpPaymentRequestMapper(
                 gson.toJson(positions.map { positionToDto(it) })
             }
         )
-        val signatureKey = repository.getSignatureKey()
-            ?: throw ValidationException(causeResource = R.string.error_validation_no_signature_key)
-        val generatedSignature = SignatureGenerator(gson).generate(requestDto, signatureKey)
-        requestDto.signature = generatedSignature
         return requestDto
     }
 

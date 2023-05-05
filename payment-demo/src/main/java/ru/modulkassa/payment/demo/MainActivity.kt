@@ -1,7 +1,6 @@
 package ru.modulkassa.payment.demo
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import ru.modulkassa.payment.demo.databinding.ActivityMainBinding
 import ru.modulkassa.payment.library.ModulPaymentClient
@@ -20,14 +19,14 @@ class MainActivity : AppCompatActivity() {
         registerPaymentCallback(this@MainActivity) { result: PaymentResult ->
             when (result) {
                 is PaymentResultSuccess -> {
-                    Toast.makeText(this@MainActivity, "Платеж завершен", Toast.LENGTH_LONG).show()
+                    binding.resultDescription.text = "Оплата прошла успешно : transactionId=${result.transactionId}"
                 }
                 is PaymentResultError -> {
                     val message = result.message
                     binding.resultDescription.text = if (result.cause.isNotBlank()) {
-                        "$message : ${result.cause}"
+                        "$message : ${result.type.name} : ${result.cause}"
                     } else {
-                        message
+                        "$message : ${result.type.name}"
                     }
                 }
             }
