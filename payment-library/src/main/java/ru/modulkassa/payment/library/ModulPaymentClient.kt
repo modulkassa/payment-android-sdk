@@ -5,7 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
 import ru.modulkassa.payment.library.domain.entity.PaymentOptions
 import ru.modulkassa.payment.library.domain.entity.result.PaymentResult
-import ru.modulkassa.payment.library.ui.PaymentActivityResultContract
+import ru.modulkassa.payment.library.ui.PaymentActivityCreateActionContract
+import ru.modulkassa.payment.library.ui.PaymentActivityResultActionContract
 
 /**
  * Клиент для работы с оплатами
@@ -14,14 +15,21 @@ class ModulPaymentClient {
 
     private lateinit var startPaymentForResult: ActivityResultLauncher<PaymentOptions>
 
+    private lateinit var getPaymentResult: ActivityResultLauncher<String>
+
     /**
-     * Зарегистрировать коллбэк на оплату
+     * Зарегистрировать коллбэк на результат оплаты
      * @param activity - ссылка на клиентскую ComponentActivity для вызова [ComponentActivity.registerForActivityResult]
      * @param resultProvider - callback с результатом платежа
      */
-    fun registerPaymentCallback(activity: ComponentActivity, resultProvider: (result: PaymentResult) -> Unit) {
+    fun registerPaymentResultCallback(activity: ComponentActivity, resultProvider: (result: PaymentResult) -> Unit) {
         startPaymentForResult =
-            activity.registerForActivityResult(PaymentActivityResultContract()) { result: PaymentResult ->
+            activity.registerForActivityResult(PaymentActivityCreateActionContract()) { result: PaymentResult ->
+                resultProvider.invoke(result)
+            }
+
+        getPaymentResult =
+            activity.registerForActivityResult(PaymentActivityResultActionContract()) { result: PaymentResult ->
                 resultProvider.invoke(result)
             }
     }
@@ -34,6 +42,16 @@ class ModulPaymentClient {
         options: PaymentOptions
     ) {
         startPaymentForResult.launch(options)
+    }
+
+    /**
+     * Получить результат оплаты
+     * @param orderId - идентификатор заказа, по которому была оплата
+     */
+    fun getPaymentResult(
+        orderId: String
+    ) {
+        getPaymentResult.launch(orderId)
     }
 
     /**

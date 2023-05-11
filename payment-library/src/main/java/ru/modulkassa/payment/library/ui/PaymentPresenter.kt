@@ -52,11 +52,11 @@ internal class PaymentPresenter(
         )
     }
 
-    override fun getPaymentResult(options: PaymentOptions) {
+    override fun getPaymentResult(orderId: String) {
         getView()?.showProgress(R.string.check_payment_progress)
         unsubscribeOnDestroy(
             paymentTerminal
-                .getPaymentStatus(options)
+                .getPaymentStatus(orderId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ result ->

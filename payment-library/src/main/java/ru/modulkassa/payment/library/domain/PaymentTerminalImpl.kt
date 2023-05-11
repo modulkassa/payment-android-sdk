@@ -41,14 +41,14 @@ internal class PaymentTerminalImpl(
     }
 
     // todo SDK-22 Проверить метод апи getTransaction(), когда сервер сделает
-    override fun getPaymentStatus(options: PaymentOptions): Single<PaymentResultSuccess> {
-        println("Начинаем проверку статуса платежа с orderId=${options.orderId}")
+    override fun getPaymentStatus(orderId: String): Single<PaymentResultSuccess> {
+        println("Начинаем проверку статуса платежа с orderId=${orderId}")
         return Single.fromCallable {
             val merchant = repository.getMerchantId()
                 ?: throw ValidationException(causeResource = R.string.error_validation_no_merchant_id)
             TransactionRequestDto(
                 merchant = merchant,
-                orderId = options.orderId
+                orderId = orderId
             )
         }.map {
             signRequest(it) as TransactionRequestDto

@@ -74,6 +74,7 @@
         tools:text="Описание результата" />
 
     <View
+        android:id="@+id/delimiter"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_margin="8dp"
@@ -81,4 +82,15 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/resultDescription" />
+
+    <Button
+        android:id="@+id/checkPaymentResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:backgroundTint="#1A1535"
+        android:text="@string/check_payment_result"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/delimiter" />
 </androidx.constraintlayout.widget.ConstraintLayout>

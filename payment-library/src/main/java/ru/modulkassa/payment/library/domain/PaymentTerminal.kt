@@ -17,6 +17,7 @@ internal interface PaymentTerminal {
 
     /**
      * Получить результат окончания процесса оплаты
+     * @param orderId - идентификатор заказа
      */
-    fun getPaymentStatus(options: PaymentOptions): Single<PaymentResultSuccess>
+    fun getPaymentStatus(orderId: String): Single<PaymentResultSuccess>
 }

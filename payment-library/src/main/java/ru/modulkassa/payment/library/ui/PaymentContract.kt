@@ -66,5 +66,5 @@ internal interface PaymentUserActions : BaseUserActions<PaymentView> {
     /**
      * Дождаться результат оплаты
      */
-    fun getPaymentResult(options: PaymentOptions)
+    fun getPaymentResult(orderId: String)
 }

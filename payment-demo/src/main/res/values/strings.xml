@@ -4,4 +4,6 @@
     <string name="result_title">Результат:</string>
     <string name="order_id">ID заказа</string>
     <string name="create_payment">Создание оплаты</string>
+    <string name="check_payment_result">Проверить результат оплаты</string>
+    <string name="error_no_order_id">Укажите идентификатор заказа</string>
 </resources>

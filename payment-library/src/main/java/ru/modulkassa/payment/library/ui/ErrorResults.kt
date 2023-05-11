@@ -35,6 +35,12 @@ internal class NoPaymentOptionsErrorResult :
     BaseErrorResult(R.string.error_result_no_payment_options, ErrorType.INVALID_DATA)
 
 /**
+ * Не указан идентификатор заказа
+ */
+internal class NoOrderIdErrorResult :
+    BaseErrorResult(R.string.error_result_no_order_id, ErrorType.INVALID_DATA)
+
+/**
  * Ошибка валидации данных при создании платежа
  */
 internal class ValidationErrorResult(

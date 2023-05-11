@@ -16,7 +16,7 @@ import kotlin.random.Random
 class MainActivity : AppCompatActivity() {
 
     private val modulPaymentClient = ModulPaymentClient().apply {
-        registerPaymentCallback(this@MainActivity) { result: PaymentResult ->
+        registerPaymentResultCallback(this@MainActivity) { result: PaymentResult ->
             when (result) {
                 is PaymentResultSuccess -> {
                     binding.resultDescription.text = "Оплата прошла успешно : transactionId=${result.transactionId}"
@@ -58,6 +58,17 @@ class MainActivity : AppCompatActivity() {
             modulPaymentClient.payBySbp(
                 options = createSingleSbpDemoOptions(orderId)
             )
+        }
+
+        binding.checkPaymentResult.setOnClickListener {
+            binding.resultDescription.text = ""
+            val orderId = binding.orderId.text.toString().ifBlank {
+                binding.orderId.error = getString(R.string.error_no_order_id)
+                null
+            }
+            if (orderId != null) {
+                modulPaymentClient.getPaymentResult(orderId)
+            }
         }
     }
 

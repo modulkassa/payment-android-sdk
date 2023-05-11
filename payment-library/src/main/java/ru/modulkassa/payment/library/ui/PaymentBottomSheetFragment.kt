@@ -40,7 +40,7 @@ internal class PaymentBottomSheetFragment : BottomSheetDialogFragment(), Payment
 
     private val browserActivityResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { _ ->
-            presenter?.getPaymentResult(paymentOptions)
+            presenter?.getPaymentResult(paymentOptions.orderId)
         }
 
     private lateinit var paymentOptions: PaymentOptions
@@ -69,17 +69,27 @@ internal class PaymentBottomSheetFragment : BottomSheetDialogFragment(), Payment
         )
         presenter?.attachView(this)
 
-        val options = requireActivity().intent.extras?.let { PaymentOptions.fromBundle(it) }
-        if (options != null) {
-            paymentOptions = options
+        val action = requireActivity().intent.getStringExtra(PaymentActivity.KEY_ACTION)
+        if (action == PaymentActivity.CREATE_PAYMENT_ACTION) {
+            val options = requireActivity().intent.extras?.let { PaymentOptions.fromBundle(it) }
+            if (options != null) {
+                paymentOptions = options
 
-            presenter?.checkPaymentOptionsAndShow(paymentOptions)
+                presenter?.checkPaymentOptionsAndShow(paymentOptions)
 
-            binding?.payBySbp?.setOnClickListener {
-                presenter?.payBySbp(paymentOptions)
+                binding?.payBySbp?.setOnClickListener {
+                    presenter?.payBySbp(paymentOptions)
+                }
+            } else {
+                setErrorResult(NoPaymentOptionsErrorResult())
             }
-        } else {
-            setErrorResult(NoPaymentOptionsErrorResult())
+        } else if (action == PaymentActivity.GET_PAYMENT_RESULT_ACTION) {
+            val orderId = requireActivity().intent.getStringExtra(PaymentActivity.KEY_ORDER_ID)
+            if (orderId.isNullOrBlank()) {
+                setErrorResult(NoOrderIdErrorResult())
+            } else {
+                presenter?.getPaymentResult(orderId)
+            }
         }
     }
 

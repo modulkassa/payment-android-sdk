@@ -19,6 +19,7 @@
     <string name="error_unknown_payment_result">Произошла ошибка при получении статуса платежа</string>
 
     <string name="error_result_no_payment_options">Не указаны параметры оплаты</string>
+    <string name="error_result_no_order_id">Не указан идентификатор заказа</string>
     <string name="error_result_cancelled_by_user">Отменено пользователем</string>
     <string name="error_result_validation">Ошибка валидации параметров оплаты</string>
     <string name="error_result_no_payment_app">Нет доступного приложения для оплаты</string>
