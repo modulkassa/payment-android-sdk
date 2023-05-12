@@ -9,6 +9,12 @@ internal abstract class BaseResponseDto {
      * "ok" - упешный
      */
     val status: BaseResponseStatus? = null
+    /**
+     * Общий текст ошибки по всему платежу
+     * Конкатенация из [fieldErrors] по "<Именование поля>:<Текст ошибки>;", если неверно заполнены поля
+     * по формату "<Не заполнены поля>: *, *, *;", если пустые поля
+     */
+    val message: String? = null
 }
 
 internal enum class BaseResponseStatus {

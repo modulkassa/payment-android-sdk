@@ -11,6 +11,8 @@ import ru.modulkassa.payment.library.domain.entity.result.PaymentResultSuccess
 import ru.modulkassa.payment.library.network.PaymentApi
 import ru.modulkassa.payment.library.network.SignatureGenerator
 import ru.modulkassa.payment.library.network.dto.BaseRequestDto
+import ru.modulkassa.payment.library.network.dto.BaseResponseDto
+import ru.modulkassa.payment.library.network.dto.BaseResponseStatus.ERROR
 import ru.modulkassa.payment.library.network.dto.ErrorResponseDto
 import ru.modulkassa.payment.library.network.dto.SbpPaymentLinkRequestDto
 import ru.modulkassa.payment.library.network.dto.TransactionRequestDto
@@ -35,6 +37,7 @@ internal class PaymentTerminalImpl(
             signRequest(it) as SbpPaymentLinkRequestDto
         }.flatMap {
             api.createSbpPayment(it)
+                .doOnSuccess { checkOnErrorStatus(it) }
                 .map { it.sbpLink }
                 .onErrorResumeNext { handleNetworkError(it) as SingleSource<out String> }
         }
@@ -59,7 +62,8 @@ internal class PaymentTerminalImpl(
                 signature = request.signature ?: "",
                 salt = request.salt,
                 unixTimestamp = request.unixTimestamp
-            ).map { it.transaction }
+            ).doOnSuccess { checkOnErrorStatus(it) }
+                .map { it.transaction }
                 .repeatWhen { it.delay(2, TimeUnit.SECONDS) }
                 .takeUntil { it.state in listOf(TransactionStateDto.COMPLETE, TransactionStateDto.FAILED) }
                 .filter { it.state in listOf(TransactionStateDto.COMPLETE, TransactionStateDto.FAILED) }
@@ -100,5 +104,11 @@ internal class PaymentTerminalImpl(
             }
             Single.error<Any>(NetworkException(causeMessage = errorResponse.message))
         } ?: Single.error<Any>(throwable)
+    }
+
+    private fun checkOnErrorStatus(response: BaseResponseDto) {
+        if (response.status == ERROR) {
+            throw NetworkException(causeMessage = response.message)
+        }
     }
 }

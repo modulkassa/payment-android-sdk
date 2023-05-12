@@ -15,11 +15,4 @@ internal class ErrorResponseDto(
      */
     @SerializedName("form_errors")
     val formErrors: String? = null,
-
-    /**
-     * Общий текст ошибки по всему платежу
-     * Конкатенация из [fieldErrors] по "<Именование поля>:<Текст ошибки>;", если неверно заполнены поля
-     * по формату "<Не заполнены поля>: *, *, *;", если пустые поля
-     */
-    val message: String? = null
 ) : BaseResponseDto()

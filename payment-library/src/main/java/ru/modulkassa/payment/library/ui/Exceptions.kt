@@ -23,4 +23,4 @@ internal class NetworkException(
  */
 internal class PaymentFailedException(
     val causeMessage: String? = null
-) : Exception()
+) : Exception(causeMessage)

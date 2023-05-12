@@ -5,4 +5,4 @@ import com.google.gson.annotations.SerializedName
 internal data class SbpPaymentLinkResponseDto(
     @SerializedName("sbp_link")
     val sbpLink: String
-): BaseResponseDto()
+) : BaseResponseDto()
