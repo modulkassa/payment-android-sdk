@@ -19,7 +19,9 @@ class MainActivity : AppCompatActivity() {
         registerPaymentResultCallback(this@MainActivity) { result: PaymentResult ->
             when (result) {
                 is PaymentResultSuccess -> {
-                    binding.resultDescription.text = "Оплата прошла успешно : transactionId=${result.transactionId}"
+                    binding.resultDescription.text = "Оплата прошла успешно:\n" +
+                        "transactionId=${result.transactionId},\n" +
+                        "sbpTransactionID=${result.sbpTransactionId}"
                 }
                 is PaymentResultError -> {
                     val message = result.message

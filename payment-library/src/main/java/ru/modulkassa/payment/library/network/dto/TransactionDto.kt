@@ -5,6 +5,8 @@ import com.google.gson.annotations.SerializedName
 internal data class TransactionDto(
     @SerializedName("transaction_id")
     val transactionId: String? = null,
+    @SerializedName("sbp_transaction_id")
+    val sbpTransactionId: String? = null,
     val state: TransactionStateDto? = null,
     @SerializedName("payment_method")
     val paymentMethod: String? = null,

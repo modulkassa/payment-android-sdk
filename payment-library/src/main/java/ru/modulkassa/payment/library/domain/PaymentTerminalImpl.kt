@@ -71,7 +71,10 @@ internal class PaymentTerminalImpl(
                 .map {
                     when (it.state) {
                         TransactionStateDto.COMPLETE -> {
-                            PaymentResultSuccess(transactionId = it.transactionId ?: "")
+                            PaymentResultSuccess(
+                                transactionId = it.transactionId ?: "",
+                                sbpTransactionId = it.sbpTransactionId ?: ""
+                            )
                         }
                         else -> {
                             throw PaymentFailedException(it.message)
