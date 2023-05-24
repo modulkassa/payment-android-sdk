@@ -43,7 +43,6 @@ internal class PaymentTerminalImpl(
         }
     }
 
-    // todo SDK-22 Проверить метод апи getTransaction(), когда сервер сделает
     override fun getPaymentStatus(orderId: String): Single<PaymentResultSuccess> {
         println("Начинаем проверку статуса платежа с orderId=${orderId}")
         return Single.fromCallable {

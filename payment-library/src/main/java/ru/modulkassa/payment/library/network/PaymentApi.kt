@@ -16,7 +16,7 @@ internal interface PaymentApi {
         @Body createSbpPaymentRequest: SbpPaymentLinkRequestDto
     ): Single<SbpPaymentLinkResponseDto>
 
-    @GET("api/v1/transaction")
+    @GET("api/v1/transaction-info")
     fun getTransaction(
         @Query("merchant") merchant: String,
         @Query("order_id") orderId: String,

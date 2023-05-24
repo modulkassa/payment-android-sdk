@@ -83,14 +83,14 @@ class MainActivity : AppCompatActivity() {
             positions = listOf(
                 Position(
                     name = "Первый товар",
-                    price = BigDecimal.valueOf(1200.10),
+                    price = BigDecimal.valueOf(0.50),
                     quantity = BigDecimal.ONE,
                     type = PositionType.COMMODITY
                 ),
                 Position(
                     name = "Вторая услуга",
-                    price = BigDecimal("20"),
-                    quantity = BigDecimal.TEN,
+                    price = BigDecimal("0.50"),
+                    quantity = BigDecimal.ONE,
                     type = PositionType.SERVICE
                 )
             )
