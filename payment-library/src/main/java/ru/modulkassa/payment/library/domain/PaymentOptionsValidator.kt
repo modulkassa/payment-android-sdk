@@ -52,12 +52,20 @@ internal object PaymentOptionsValidator {
                     checkLength(128)
                 }
 
-            if (position.quantity.compareTo(BigDecimal("99999.999")) > 1) {
-                throw ValidationException("Слишком большое значение в поле position.quantity - ${position.quantity}")
+            if (position.quantity.compareTo(BigDecimal.ZERO) <= 0) {
+                throw ValidationException("Отрицательное или нулевое значение в поле position.quantity = ${position.quantity}")
             }
 
-            if (position.price.compareTo(BigDecimal("99999999.99")) > 1) {
-                throw ValidationException("Слишком большое значение в поле position.price - ${position.price}")
+            if (position.quantity.compareTo(BigDecimal("99999.999")) > 0) {
+                throw ValidationException("Слишком большое значение в поле position.quantity = ${position.quantity}")
+            }
+
+            if (position.price.compareTo(BigDecimal.ZERO) <= 0) {
+                throw ValidationException("Отрицательное или нулевое значение в поле position.price = ${position.price}")
+            }
+
+            if (position.price.compareTo(BigDecimal("99999999.99")) > 0) {
+                throw ValidationException("Слишком большое значение в поле position.price = ${position.price}")
             }
         }
     }
@@ -69,21 +77,21 @@ internal class FieldValidator(
 ) {
     fun checkNotBlank() {
         if (fieldValue.isBlank()) {
-            throw ValidationException("Пустое значение в поле $fieldName - $fieldValue")
+            throw ValidationException("Пустое значение в поле $fieldName")
         }
     }
 
     fun checkLength(fieldLength: Int) {
         if (fieldValue.length > fieldLength) {
             throw ValidationException(
-                "Слишком длинное значение в поле $fieldName - $fieldValue (максимально $fieldLength символов)"
+                "Слишком длинное значение в поле $fieldName = $fieldValue (максимально $fieldLength символов)"
             )
         }
     }
 
     fun checkOnlyPrintableAscii() {
         if (containsNotOnlyPrintableAsciiSymbols(fieldValue)) {
-            throw ValidationException("Присутствуют непечатные Ascii символы в поле $fieldName - $fieldValue")
+            throw ValidationException("Присутствуют непечатные Ascii символы в поле $fieldName = $fieldValue")
         }
     }
 

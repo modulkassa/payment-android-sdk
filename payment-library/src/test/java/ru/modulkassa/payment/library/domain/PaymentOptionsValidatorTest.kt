@@ -109,6 +109,7 @@ class PaymentOptionsValidatorTest {
         assertFailsWith(ValidationException::class) {
             PaymentOptionsValidator.validate(
                 createDefaultOptions(
+                    amount = null,
                     positions = listOf(
                         Position(
                             name = "1".repeat(129),
@@ -127,6 +128,7 @@ class PaymentOptionsValidatorTest {
         assertFailsWith(ValidationException::class) {
             PaymentOptionsValidator.validate(
                 createDefaultOptions(
+                    amount = null,
                     positions = listOf(
                         Position(
                             name = "  ",
@@ -145,6 +147,7 @@ class PaymentOptionsValidatorTest {
         assertFailsWith(ValidationException::class) {
             PaymentOptionsValidator.validate(
                 createDefaultOptions(
+                    amount = null,
                     positions = listOf(
                         Position(
                             name = "Первая позиция",
@@ -159,14 +162,92 @@ class PaymentOptionsValidatorTest {
     }
 
     @Test
+    fun Validate_NegativeQantity_ExceptionCought() {
+        assertFailsWith(ValidationException::class) {
+            PaymentOptionsValidator.validate(
+                createDefaultOptions(
+                    amount = null,
+                    positions = listOf(
+                        Position(
+                            name = "Первая позиция",
+                            price = BigDecimal.TEN,
+                            quantity = BigDecimal.valueOf(-10),
+                            type = PositionType.COMMODITY
+                        )
+                    )
+                )
+            )
+        }
+    }
+
+    @Test
+    fun Validate_ZeroQantity_ExceptionCought() {
+        assertFailsWith(ValidationException::class) {
+            PaymentOptionsValidator.validate(
+                createDefaultOptions(
+                    amount = null,
+                    positions = listOf(
+                        Position(
+                            name = "Первая позиция",
+                            price = BigDecimal.TEN,
+                            quantity = BigDecimal.valueOf(00.000),
+                            type = PositionType.COMMODITY
+                        )
+                    )
+                )
+            )
+        }
+    }
+
+    @Test
     fun Validate_TooMuchPrice_ExceptionCought() {
         assertFailsWith(ValidationException::class) {
             PaymentOptionsValidator.validate(
                 createDefaultOptions(
+                    amount = null,
                     positions = listOf(
                         Position(
                             name = "Первая позиция",
                             price = BigDecimal.valueOf(1000000000.00),
+                            quantity = BigDecimal.ONE,
+                            type = PositionType.COMMODITY
+                        )
+                    )
+                )
+            )
+        }
+    }
+
+    @Test
+    fun Validate_NegativePrice_ExceptionCought() {
+        assertFailsWith(ValidationException::class) {
+            PaymentOptionsValidator.validate(
+                createDefaultOptions(
+                    amount = null,
+                    positions = listOf(
+                        Position(
+                            name = "Первая позиция",
+                            price = BigDecimal.valueOf(-10.00),
+                            quantity = BigDecimal.ONE,
+                            type = PositionType.COMMODITY
+                        )
+                    )
+                )
+            )
+        }
+    }
+
+
+    @Test
+    fun Validate_ZeroPrice_ExceptionCought() {
+        assertFailsWith(ValidationException::class) {
+            PaymentOptionsValidator.validate(
+                createDefaultOptions(
+                    amount = null,
+                    positions = listOf(
+                        Position(
+                            name = "Первая позиция",
+                            price = BigDecimal.valueOf(00.00),
                             quantity = BigDecimal.ONE,
                             type = PositionType.COMMODITY
                         )

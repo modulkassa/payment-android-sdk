@@ -65,12 +65,15 @@
         <TextView
             android:id="@+id/summary"
             style="@style/Subheader2"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/positions"
+            app:layout_constraintLeft_toRightOf="@id/summary_title"
+            android:gravity="end"
+            android:layout_marginStart="8dp"
             tools:text="160.00 Р" />
 
         <com.google.android.material.button.MaterialButton

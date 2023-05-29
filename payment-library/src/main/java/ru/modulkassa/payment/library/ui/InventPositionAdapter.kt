@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.modulkassa.payment.library.databinding.ItemInventPositionBinding
 import ru.modulkassa.payment.library.domain.entity.position.Position
+import ru.modulkassa.payment.library.network.BigDecimalFormatter
 import java.math.RoundingMode
 
 internal class InventPositionAdapter(
@@ -30,7 +31,7 @@ internal class InventPositionAdapter(
         fun bindView(position: Position) {
             binding.name.text = position.name
             binding.price.text = RubSuffixSumFormatter().format(position.price)
-            binding.quantity.text = position.quantity.setScale(0, RoundingMode.HALF_UP).toPlainString()
+            binding.quantity.text = BigDecimalFormatter.format(position.quantity, scale = 3)
         }
     }
 }

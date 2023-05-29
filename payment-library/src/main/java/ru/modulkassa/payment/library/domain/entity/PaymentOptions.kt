@@ -39,11 +39,12 @@ class PaymentOptions private constructor(
             description: String,
             /**
              * Сумма платежа
-             * Необязательно, если переданы позиции для платежа
+             * Необязательное, если переданы позиции для платежа
              */
             amount: BigDecimal? = null,
             /**
              * Список позиций для платежа
+             * Необязательное
              */
             positions: List<Position>? = null,
             /**

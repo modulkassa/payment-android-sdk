@@ -2,6 +2,7 @@ package ru.modulkassa.payment.library.ui
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.ActivityNotFoundException
 import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
@@ -150,7 +151,9 @@ internal class PaymentBottomSheetFragment : BottomSheetDialogFragment(), Payment
             println("Переходим на оплату в банковское приложение")
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(sbpLink))
             browserActivityResultLauncher.launch(browserIntent)
-        } catch (exception: java.lang.NullPointerException) {
+        } catch (exception: NullPointerException) {
+            setErrorResult(NoPaymentAppErrorResult())
+        } catch (exception: ActivityNotFoundException) {
             setErrorResult(NoPaymentAppErrorResult())
         }
     }
