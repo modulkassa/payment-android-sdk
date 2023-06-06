@@ -18,6 +18,7 @@ jobs:
                   ENCODED_KEYSTORE: ${{ secrets.KEYSTORE }}
               run: |
                   TMP_KEYSTORE_FILE_PATH="${RUNNER_TEMP}"/keystore
+                  echo ${TMP_KEYSTORE_FILE_PATH}
                   mkdir "$TMP_KEYSTORE_FILE_PATH"
                   echo $ENCODED_KEYSTORE | base64 -di > "${TMP_KEYSTORE_FILE_PATH}"/demo-keystore.jks
             - name: Build with Gradle
