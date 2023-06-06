@@ -18,5 +18,5 @@ jobs:
               run: chmod +x gradlew
             - name: Release build
               run: ./gradlew :payment-library:clean :payment-library:build
-            - name: Publish to Internal Nexus Repo
-              run: ./gradlew :payment-library:publishMavenPublicationToInternalRepository --max-workers 1
+            #- name: Publish to Internal Nexus Repo
+            #  run: ./gradlew :payment-library:publishMavenPublicationToInternalRepository --max-workers 1
