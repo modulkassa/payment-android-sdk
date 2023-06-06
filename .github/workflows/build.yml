@@ -28,4 +28,9 @@ jobs:
               uses: actions/upload-artifact@v3
               with:
                   path: ./**/build/test-results/**/TEST-*.xml
+            - name: Show test summary
+              uses: test-summary/action@v2
+              with:
+                path: ./**/build/test-results/**/TEST-*.xml
+              if: always()
 
