@@ -18,7 +18,7 @@ jobs:
             - name: Upload build artifacts
               uses: actions/upload-artifact@v3
               with:
-                  paths: |
+                  path: |
                       ./payment-demo/build/outputs/apk/
                       ./**/build/reports/lint-results.xml
                       ./**/build/reports/lint-results-*.html
