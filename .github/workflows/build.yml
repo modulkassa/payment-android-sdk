@@ -3,8 +3,6 @@ on: [push, pull_request]
 jobs:
     build:
         runs-on: ubuntu-latest
-        env:
-            KEYSTORE_FILE_PATH: "${RUNNER_TEMP}"/../payment-android-sdk/payment-android-sdk/payment-demo/keystore
         steps:
             - name: Check out code
               uses: actions/checkout@v3
@@ -19,6 +17,7 @@ jobs:
               env:
                   ENCODED_KEYSTORE: ${{ secrets.KEYSTORE }}
               run: |
+                  KEYSTORE_FILE_PATH="${RUNNER_TEMP}"/../payment-android-sdk/payment-android-sdk/payment-demo/keystore
                   echo ${KEYSTORE_FILE_PATH}
                   mkdir "KEYSTORE_FILE_PATH"
                   echo $ENCODED_KEYSTORE | base64 -di > "${KEYSTORE_FILE_PATH}"/demo-keystore.jks
@@ -36,7 +35,9 @@ jobs:
                       ./**/build/reports/lint-results.xml
                       ./**/build/reports/lint-results-*.html
             - name: Clean up keystore
-              run: rm -r "$KEYSTORE_FILE_PATH"
+              run: |
+                  KEYSTORE_FILE_PATH="${RUNNER_TEMP}"/../payment-android-sdk/payment-android-sdk/payment-demo/keystore
+                  rm -r "$KEYSTORE_FILE_PATH"
             - name: Verification
               run: ./gradlew testDebug
             - name: Upload code coverage results
