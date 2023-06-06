@@ -17,7 +17,7 @@ jobs:
               env:
                   ENCODED_KEYSTORE: ${{ secrets.KEYSTORE }}
               run: |
-                  TMP_KEYSTORE_FILE_PATH="${RUNNER_TEMP}"/keystore
+                  TMP_KEYSTORE_FILE_PATH="${RUNNER_TEMP}"/../payment-android-sdk/payment-android-sdk/payment-demo/keystore
                   echo ${TMP_KEYSTORE_FILE_PATH}
                   mkdir "$TMP_KEYSTORE_FILE_PATH"
                   echo $ENCODED_KEYSTORE | base64 -di > "${TMP_KEYSTORE_FILE_PATH}"/demo-keystore.jks
