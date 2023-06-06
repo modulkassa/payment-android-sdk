@@ -17,8 +17,7 @@ jobs:
               env:
                   ENCODED_KEYSTORE: ${{ secrets.KEYSTORE }}
               run: |
-                  KEYSTORE_FILE_PATH="/home/runner/work/payment-android-sdk/payment-android-sdk/payment-demo/keystore
-                  echo ${KEYSTORE_FILE_PATH}
+                  echo ${{ variables.KEYSTORE_FILE_PATH }}
                   mkdir "KEYSTORE_FILE_PATH"
                   echo $ENCODED_KEYSTORE | base64 -di > "${KEYSTORE_FILE_PATH}"/demo-keystore.jks
             - name: Build with Gradle
@@ -35,9 +34,7 @@ jobs:
                       ./**/build/reports/lint-results.xml
                       ./**/build/reports/lint-results-*.html
             - name: Clean up keystore
-              run: |
-                  KEYSTORE_FILE_PATH="/home/runner/work/payment-android-sdk/payment-android-sdk/payment-demo/keystore
-                  rm -r "$KEYSTORE_FILE_PATH"
+              run: rm -r "${{ variables.KEYSTORE_FILE_PATH }}"
             - name: Verification
               run: ./gradlew testDebug
             - name: Upload code coverage results
