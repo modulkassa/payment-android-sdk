@@ -24,6 +24,6 @@ jobs:
             - name: Verification
               run: ./gradlew testDebug
             - name: Upload code coverage results
-                uses: actions/upload-artifact@v3
-                with:
-                    path: ./**/build/test-results/**/TEST-*.xml
+              uses: actions/upload-artifact@v3
+              with:
+                  path: ./**/build/test-results/**/TEST-*.xml
