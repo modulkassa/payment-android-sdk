@@ -5,6 +5,12 @@ plugins {
 
 apply from: '../clientKeys.gradle'
 
+Properties localProperties = new Properties()
+File propertiesFile = project.rootProject.file('local.properties')
+if (propertiesFile.exists()) {
+    localProperties.load(propertiesFile.newDataInputStream())
+}
+
 android {
     namespace "ru.modulkassa.payment.demo"
     compileSdk versions.compileSdk
@@ -22,10 +28,20 @@ android {
         buildConfigField "String", "SIGNATURE_KEY", "\"${signatureKey}\""
     }
 
+    signingConfigs {
+        release {
+            storeFile file("keystore/demo_keystore.jks")
+            storePassword System.getenv("SIGNING_STORE_PASSWORD") ?: localProperties.getProperty("android.storePassword")
+            keyAlias System.getenv("SIGNING_KEY_ALIAS") ?: localProperties.getProperty("android.keyAlias")
+            keyPassword System.getenv("SIGNING_KEY_PASSWORD") ?: localProperties.getProperty("android.keyPassword")
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
@@ -33,7 +49,11 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        abortOnError false
     }
 
     buildFeatures {

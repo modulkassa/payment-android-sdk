@@ -13,8 +13,19 @@ jobs:
                   distribution: 'adopt'
             - name: Grant execute permission for gradlew
               run: chmod +x gradlew
+            - name: Decode keystore
+              env:
+                  ENCODED_KEYSTORE: ${{ secrets.KEYSTORE }}
+              run: |
+                  TMP_KEYSTORE_FILE_PATH="${RUNNER_TEMP}"/keystore
+                  mkdir "$TMP_KEYSTORE_FILE_PATH"
+                  echo $ENCODED_KEYSTORE | base64 -di > "$TMP_KEYSTORE_FILE_PATH"/demo-keystore.jks
             - name: Build with Gradle
               run: ./gradlew clean lintDebug assembleRelease
+              env:
+                  SIGNING_STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
+                  SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+                  SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
             - name: Upload build artifacts
               uses: actions/upload-artifact@v3
               with:
@@ -22,6 +33,10 @@ jobs:
                       ./payment-demo/build/outputs/apk/
                       ./**/build/reports/lint-results.xml
                       ./**/build/reports/lint-results-*.html
+            - name: Clean up keystore
+              run: |
+                  TMP_KEYSTORE_FILE_PATH="${RUNNER_TEMP}"/keystore
+                  rm -r "$TMP_KEYSTORE_FILE_PATH"
             - name: Verification
               run: ./gradlew testDebug
             - name: Upload code coverage results
