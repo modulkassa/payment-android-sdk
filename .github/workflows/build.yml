@@ -17,7 +17,7 @@ jobs:
               env:
                   ENCODED_KEYSTORE: ${{ secrets.KEYSTORE }}
               run: |
-                  echo ${{ variables.KEYSTORE_FILE_PATH }}
+                  echo ${{ env.KEYSTORE_FILE_PATH }}
                   mkdir "KEYSTORE_FILE_PATH"
                   echo $ENCODED_KEYSTORE | base64 -di > "${KEYSTORE_FILE_PATH}"/demo-keystore.jks
             - name: Build with Gradle
@@ -34,7 +34,7 @@ jobs:
                       ./**/build/reports/lint-results.xml
                       ./**/build/reports/lint-results-*.html
             - name: Clean up keystore
-              run: rm -r "${{ variables.KEYSTORE_FILE_PATH }}"
+              run: rm -r "${{ env.KEYSTORE_FILE_PATH }}"
             - name: Verification
               run: ./gradlew testDebug
             - name: Upload code coverage results
