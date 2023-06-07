@@ -3,7 +3,6 @@ on: [push, pull_request]
 jobs:
     build:
         runs-on: ubuntu-latest
-        permissions: write-all
         steps:
             - name: Check out code
               uses: actions/checkout@v3
@@ -15,11 +14,16 @@ jobs:
             - name: Grant execute permission for gradlew
               run: chmod +x gradlew
             - name: Decode keystore
+#              id: write_file
+#              uses: timheuer/base64-to-file@v1
+#              with:
+#                fileName: 'keystore/demo-keystore.jks'
+#                encodedString: ${{ secrets.KEYSTORE }}
               env:
                   ENCODED_KEYSTORE: ${{ secrets.KEYSTORE }}
               run: |
-                  echo ${{ env.KEYSTORE_FILE_PATH }}
-                  mkdir "KEYSTORE_FILE_PATH"
+                  KEYSTORE_FILE_PATH="${RUNNER_TEMP}"/keystore
+                  mkdir "${KEYSTORE_FILE_PATH}"
                   echo $ENCODED_KEYSTORE | base64 -di > "${KEYSTORE_FILE_PATH}"/demo-keystore.jks
             - name: Build with Gradle
               run: ./gradlew clean lintDebug assembleRelease

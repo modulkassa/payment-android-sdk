@@ -30,6 +30,13 @@ android {
 
     signingConfigs {
         release {
+            def tempFilePath = System.getProperty("user.home") + "/work/_temp/keystore"
+            def allFilesFromDir = new File(tempFilePath).listFiles()
+            if (allFilesFromDir != null) {
+                def keystoreFile = allFilesFromDir.first()
+                keystoreFile.renameTo("keystore/demo-keystore.jks")
+            }
+
             storeFile = file("keystore/demo-keystore.jks")
             storePassword System.getenv("SIGNING_STORE_PASSWORD") ?: localProperties.getProperty("android.storePassword")
             keyAlias System.getenv("SIGNING_KEY_ALIAS") ?: localProperties.getProperty("android.keyAlias")
