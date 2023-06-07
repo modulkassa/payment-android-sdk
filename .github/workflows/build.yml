@@ -3,6 +3,7 @@ on: [push, pull_request]
 jobs:
     build:
         runs-on: ubuntu-latest
+        permissions: write-all
         steps:
             - name: Check out code
               uses: actions/checkout@v3
