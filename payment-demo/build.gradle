@@ -22,7 +22,7 @@ android {
         minSdk versions.minSdk
         targetSdk versions.targetSdk
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
 
         buildConfigField "String", "MERCHANT_ID", "\"${merchantId}\""
         buildConfigField "String", "SIGNATURE_KEY", "\"${signatureKey}\""
@@ -30,16 +30,9 @@ android {
 
     signingConfigs {
         release {
-//            def tempFilePath = System.getProperty("user.home") + "/work/_temp/keystore"
-//            def allFilesFromDir = new File(tempFilePath).listFiles()
-//            if (allFilesFromDir != null) {
-//                def keystoreFile = allFilesFromDir.first()
-//                keystoreFile.renameTo("keystore/demo-keystore.jks")
-//            }
-
             def storeFilePath = System.getenv("RUNNER_TEMP") + "/keystore/demo-keystore.jks"
-
             storeFile file(storeFilePath)
+
             storePassword System.getenv("SIGNING_STORE_PASSWORD") ?: localProperties.getProperty("android.storePassword")
             keyAlias System.getenv("SIGNING_KEY_ALIAS") ?: localProperties.getProperty("android.keyAlias")
             keyPassword System.getenv("SIGNING_KEY_PASSWORD") ?: localProperties.getProperty("android.keyPassword")
