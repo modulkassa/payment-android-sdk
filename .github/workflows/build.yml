@@ -39,7 +39,7 @@ jobs:
                       ./**/build/reports/lint-results.xml
                       ./**/build/reports/lint-results-*.html
             - name: Clean up keystore
-              run: rm -r "${{ env.KEYSTORE_FILE_PATH }}"
+              run: rm -r "${RUNNER_TEMP}/keystore/demo-keystore.jks"
             - name: Verification
               run: ./gradlew testDebug
             - name: Upload code coverage results
