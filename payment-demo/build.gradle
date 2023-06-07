@@ -37,7 +37,8 @@ android {
                 keystoreFile.renameTo("keystore/demo-keystore.jks")
             }
 
-            storeFile = file("keystore/demo-keystore.jks")
+            storeFile file("keystore/demo-keystore.jks")
+//            System.getenv("RUNNER_TEMP")
             storePassword System.getenv("SIGNING_STORE_PASSWORD") ?: localProperties.getProperty("android.storePassword")
             keyAlias System.getenv("SIGNING_KEY_ALIAS") ?: localProperties.getProperty("android.keyAlias")
             keyPassword System.getenv("SIGNING_KEY_PASSWORD") ?: localProperties.getProperty("android.keyPassword")
