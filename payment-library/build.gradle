@@ -82,7 +82,7 @@ publishing {
     }
 
     publications {
-        maven(MavenPublication) {
+        release(MavenPublication) {
             groupId 'ru.modulkassa'
             artifactId libArtifactId
             version libVersionName
@@ -95,6 +95,13 @@ publishing {
             pom {
                 name = libArtifactId
                 description = 'Payment Android SDK'
+                url = "https://github.com/modulkassa/payment-android-sdk"
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://github.com/modulkassa/payment-android-sdk/blob/master/LICENSE'
+                    }
+                }
             }
 
             //The publication doesn't know about our dependencies, so we have to manually add them to the pom
