@@ -1,4 +1,6 @@
 # Payment Android SDK
+[![Release](https://jitpack.io/v/modulkassa/payment-android-sdk.svg)](https://jitpack.io/#modulkassa/payment-android-sdk)
+
 #### SDK для оплаты в мобильных приложениях
 
 <img src="screenshots/bottomsheet.png" width="320"> <img src="screenshots/create_payment.png" width="320">
@@ -24,6 +26,26 @@ Payment Android SDK позволяет интегрировать [интерн�
 ```properties
 client.merchantId=<your merchant id>
 client.signatureKey=<your signature>
+```
+
+### Подключение библиотеки
+
+Добавить репозиторий в build.gradle файл
+
+```groovy
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+
+Подключить библиотеку
+
+```groovy
+dependencies {
+    implementation 'com.github.modulkassa:payment-android-sdk:x.x.x'
+}
 ```
 
 ### Пример использования

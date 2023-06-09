@@ -3,10 +3,6 @@ buildscript {
     apply from: 'dependencies.gradle'
 
     repositories {
-        maven {
-            url 'https://nexus.moduldev.ru/repository/android/'
-            name 'Modulbank Android'
-        }
         mavenCentral()
         google()
     }
@@ -22,10 +18,6 @@ apply from: 'dependencies.gradle'
 allprojects {
 
     repositories {
-        maven {
-            url 'https://nexus.moduldev.ru/repository/android/'
-            name 'Modulbank Android'
-        }
         google()
         mavenCentral()
         flatDir {
